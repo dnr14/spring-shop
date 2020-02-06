@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: start0119
+Bundle-SymbolicName: start0119
+Bundle-Version: 1.0.0.qualifier
+Export-Package: dev.mvc.cateGroup,
+ dev.mvc.member,
+ dev.mvc.photo,
+ mybatis
