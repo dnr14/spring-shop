@@ -80,6 +80,7 @@ $(document).ready(function(){
 		                <li class="nav-item"><a href="${root }/admin/logOut" class="nav-link">관리자 로그아웃</a></li>
                   </c:otherwise>
                 </c:choose>
+		                <li class="nav-item"><a href="${root }/admin/mail" class="nav-link">메일 보내기 테스트</a></li>
             </ul>
            	 <div class="dropdown" style="padding-left: 15px;">
 		          <a id="dLabel" data-target="#" href="http://naver.com" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
