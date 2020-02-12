@@ -211,6 +211,7 @@ public class memberCnt {
   @PostMapping("/IdFind")
   public ModelAndView IdFindProc(memberIdPwdFind memberIdPwdFind, Errors errors) {
     System.out.println("호출");
+    System.out.println("호출");
     ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "required", "이메일은 필수 입니다.");
     return new ModelAndView("member/IdFind");     
   }
