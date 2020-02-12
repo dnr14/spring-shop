@@ -20,9 +20,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dev.mvc.tool.MailService;
+
 @Controller
 @RequestMapping(value="/member")
 public class memberCnt {
+  
+  @Autowired
+  @Qualifier("GoogleMail")
+  private MailService googleMail;
 
 	@Autowired
 	@Qualifier("memberProc")
@@ -164,12 +170,53 @@ public class memberCnt {
 		return new ModelAndView("member/login");
 	}
 	
+	/**
+	 * 회원 로그아웃
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/logOut")
 	public ModelAndView logOut(HttpSession session) {
 		System.out.println(session.getAttribute("id"));
 		session.invalidate();
 		return new ModelAndView("redirect:/");
 	}
+	
+  /**
+   * 회원 아이디 찾기
+   * @return
+   */
+  @GetMapping("/mail")
+  public String sendMail() {
+    googleMail.sendMail();
+    return "redirect:/";
+  }
+  
+  /**
+   * 회원아이디 찾기 페이지
+   * @return
+   */
+  @GetMapping("/IdFind")
+  public ModelAndView IdFindFrom() {
+    return new ModelAndView("member/IdFind")
+        .addObject("memberIdPwdFind",new memberIdPwdFind());
+  }
+  
+  /**
+   * 회원아이디 찾기 폼
+   * @param memberIdPwdFind
+   * @param errors
+   * @return
+   */
+  @PostMapping("/IdFind")
+  public ModelAndView IdFindProc(memberIdPwdFind memberIdPwdFind, Errors errors) {
+    System.out.println("호출");
+    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "required", "이메일은 필수 입니다.");
+    return new ModelAndView("member/IdFind");     
+  }
+  
+  
+  
 	
 	
 }

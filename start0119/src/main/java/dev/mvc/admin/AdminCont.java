@@ -1,13 +1,9 @@
 package dev.mvc.admin;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -23,9 +19,10 @@ public class AdminCont {
   @Autowired
   @Qualifier("AdminProc")
   private AdminProcInter adminProc;
-
-  @Autowired
-  private JavaMailSender mailSender;
+  
+  public AdminCont() {
+    System.out.println("AdminCont ==>  AdminCont 의존성 생성");
+  }
 
   /**
    * admin 로그인 화면
@@ -79,29 +76,8 @@ public class AdminCont {
   @GetMapping("/logOut")
   public String AdminLogOut(HttpSession session) {
     session.invalidate();
-    return "index";
+    return "redirect:/";
   }
 
-  @GetMapping("/mail")
-  public ModelAndView sendMail() {
-    System.out.println(mailSender.toString());
-
-    final MimeMessagePreparator message = new MimeMessagePreparator() {
-      @Override
-      public void prepare(MimeMessage mimeMessage) throws Exception {
-        final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-        
-        helper.setFrom("dnr0145@gmail.com"); // 보내는사람 생략하면 정상작동을 안함
-        helper.setTo("dnr14@naver.com"); // 받는사람 이메일
-        helper.setSubject("테스트"); // 메일제목은 생략이 가능하다
-        helper.setText("<h1>안녕</h1>",true); // 메일 내용
-      }
-
-    };
-    
-    mailSender.send(message);
-
-    return new ModelAndView("redirect:/");
-  }
 
 }

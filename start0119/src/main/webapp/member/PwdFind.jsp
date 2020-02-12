@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<c:set var="root" value="${pageContext.request.contextPath}" />
 
  
 <!DOCTYPE html> 
@@ -27,7 +26,7 @@
                 <div class="content">
 					<h1 class="text-center">로그인</h1>
 					<c:url value="/member/login.do" var="path"/>
-					<form:form role="form" commandName="memberLoginCheck" action="${path }" method="post">
+					<form:form role="form" commandName="memberIdPwdFind" action="${path }" method="post">
 						<div class="form-group">
 							<label for="id">아이디 </label> 
 							<form:input type="text" path="id" class="form-control" placeholder="아이디를 입력하세요." value="${memberLoginCheck.id }"/>
@@ -47,8 +46,6 @@
 						</div>
 						<div class="text-center">
 							<button type="submit" class="btn btn-primary w-100">로그인</button>
-							<button type="button" class="btn btn-primary w-100 mt-2" onclick="location.href='${root}/member/IdFind'">아이디 찾기</button>
-							<button type="button" class="btn btn-primary w-100 mt-2" onclick="location.href='${root}/member/IdPwFind'">비밀번호 찾기</button>
 						</div>
 					</form:form>
 				</div>  
