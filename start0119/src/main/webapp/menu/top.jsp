@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="root" value="${pageContext.request.contextPath}" />
 
+
 <script type="text/javascript">
 $(document).ready(function(){
 	
@@ -16,7 +17,6 @@ $(document).ready(function(){
 	$(".dropdown-menu").on('mouseout', function(){
 	    $(".dropdown-menu").attr('style','display:none');
 	});
-	
 	
 	 var obj =  {
 		      url : '${root}/cateGroup/cateGroupTopList',
@@ -70,6 +70,15 @@ $(document).ready(function(){
                 	<c:otherwise>
 	                	 <li class="nav-item"><a href="${root }/member/logOut" class="nav-link" onclick="alert('로그아웃 되었습니다.');">로그아웃</a></li>
                 	</c:otherwise>
+                </c:choose>
+                
+                <c:choose>
+                  <c:when test="${sessionScope.admin_id eq null }">
+		                <li class="nav-item"><a href="${root }/admin/login" class="nav-link">관리자 로그인</a></li>
+                  </c:when>
+                  <c:otherwise>
+		                <li class="nav-item"><a href="${root }/admin/logOut" class="nav-link">관리자 로그아웃</a></li>
+                  </c:otherwise>
                 </c:choose>
             </ul>
            	 <div class="dropdown" style="padding-left: 15px;">
