@@ -36,5 +36,36 @@ public interface memberProcInter {
 	 * @return 실패 null
 	 */
 	public memberVO loginCheck(memberLoginCheck mlc);
+	
+	
+	/**
+	 * Id 찾기
+	 * @param email
+	 * @return
+	 */
+	public int IdFindCount(String email);
+
+	/**
+	 * id 찾기
+	 * @param email
+	 * @return
+	 */
+	public String IdFind(String email);
+	
+	/**
+	 * 비밀번호 갯수
+	 * @param memberIdPwdFind
+	 * @return
+	 */
+	public int PwdFindCount(memberIdPwdFind memberIdPwdFind);
+	
+	
+	/**
+	 * 비밀번호 찾기
+	 * @param memberIdPwdFind
+	 * @return
+	 */
+	public String PwdFind(memberIdPwdFind memberIdPwdFind);
+	
 
 }

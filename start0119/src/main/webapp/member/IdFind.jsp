@@ -28,7 +28,7 @@
 		     <form:form role="form" commandName="memberIdPwdFind" action="${path }" method="post">  
 		      <div class="form-group">
              <label for="id">이메일 </label> 
-             <form:input type="text" path="email" class="form-control" placeholder="이메일을 입력하세요."/>
+             <form:input type="email" path="email" class="form-control" placeholder="이메일을 입력하세요."/>
              <div class="mt-2">
                <form:errors path="email" style="color:red"/>
              </div>

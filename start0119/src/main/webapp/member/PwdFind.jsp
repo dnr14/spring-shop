@@ -24,8 +24,8 @@
 
             <div class="col-md-9 cont">
                 <div class="content">
-					<h1 class="text-center">로그인</h1>
-					<c:url value="/member/login.do" var="path"/>
+					<h1 class="text-center">비밀번호 찾기</h1>
+					<c:url value="/member/PwdFind" var="path"/>
 					<form:form role="form" commandName="memberIdPwdFind" action="${path }" method="post">
 						<div class="form-group">
 							<label for="id">아이디 </label> 
@@ -35,17 +35,14 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="pwd">패스워드</label> 
-							<form:password path="pwd" class="form-control" placeholder="비밀번호를 입력하세요."/>
+							<label for="email">이메일</label> 
+							<form:input type="email" path="email" class="form-control" placeholder="이메일을 입력하세요."/>
 							<div class="mt-2">
-								<form:errors path="pwd" style="color:red"/>
+								<form:errors path="email" style="color:red"/>
 							</div>
 						</div>
-						<div>
-							<label for="cookieCheck1">아이디 저장</label><form:checkbox path="cookieCheck" class="ml-2" value="${memberLoginCheck.cookieCheck }"/>
-						</div>
 						<div class="text-center">
-							<button type="submit" class="btn btn-primary w-100">로그인</button>
+							<button type="submit" class="btn btn-primary w-100">비밀번호 찾기</button>
 						</div>
 					</form:form>
 				</div>  

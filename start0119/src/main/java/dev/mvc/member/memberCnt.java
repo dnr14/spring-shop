@@ -23,12 +23,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.mvc.tool.MailService;
 
 @Controller
-@RequestMapping(value="/member")
+@RequestMapping(value = "/member")
 public class memberCnt {
-  
-  @Autowired
-  @Qualifier("GoogleMail")
-  private MailService googleMail;
+
+	@Autowired
+	@Qualifier("GoogleMail")
+	private MailService googleMail;
 
 	@Autowired
 	@Qualifier("memberProc")
@@ -44,26 +44,25 @@ public class memberCnt {
 	 * @return
 	 */
 	@GetMapping("/create")
-	public ModelAndView createView(
-			HttpServletRequest request,
+	public ModelAndView createView(HttpServletRequest request,
 			@CookieValue(value = "create_agree", required = false) Cookie cookie) throws Exception {
 
 		String agree = "N";
-		
-		if(cookie !=null) {
+
+		if (cookie != null) {
 			agree = cookie.getValue();
 		}
 
 		if (agree.equals("Y")) {
-			return new ModelAndView("member/create").
-					addObject("memberCreateRequest", new memberCreateRequest());
+			return new ModelAndView("member/create").addObject("memberCreateRequest", new memberCreateRequest());
 		} else {
 			return new ModelAndView("/member/agreement");
 		}
 	}
-	
+
 	/**
 	 * 회원가입 agreement
+	 * 
 	 * @return
 	 */
 	@GetMapping("/agreement")
@@ -169,9 +168,10 @@ public class memberCnt {
 		}
 		return new ModelAndView("member/login");
 	}
-	
+
 	/**
 	 * 회원 로그아웃
+	 * 
 	 * @param session
 	 * @return
 	 */
@@ -181,43 +181,97 @@ public class memberCnt {
 		session.invalidate();
 		return new ModelAndView("redirect:/");
 	}
-	
-  /**
-   * 회원 아이디 찾기
-   * @return
-   */
-  @GetMapping("/mail")
-  public String sendMail() {
-    googleMail.sendMail();
-    return "redirect:/";
-  }
-  
-  /**
-   * 회원아이디 찾기 페이지
-   * @return
-   */
-  @GetMapping("/IdFind")
-  public ModelAndView IdFindFrom() {
-    return new ModelAndView("member/IdFind")
-        .addObject("memberIdPwdFind",new memberIdPwdFind());
-  }
-  
-  /**
-   * 회원아이디 찾기 폼
-   * @param memberIdPwdFind
-   * @param errors
-   * @return
-   */
-  @PostMapping("/IdFind")
-  public ModelAndView IdFindProc(memberIdPwdFind memberIdPwdFind, Errors errors) {
-    System.out.println("호출");
-    System.out.println("호출");
-    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "required", "이메일은 필수 입니다.");
-    return new ModelAndView("member/IdFind");     
-  }
-  
-  
-  
-	
-	
+
+	/**
+	 * 회원아이디 찾기 페이지
+	 * 
+	 * @return
+	 */
+	@GetMapping("/IdFind")
+	public ModelAndView IdFindFrom() {
+		return new ModelAndView("member/IdFind").addObject("memberIdPwdFind", new memberIdPwdFind());
+	}
+
+	/**
+	 * 회원아이디 찾기 폼
+	 * 
+	 * @param memberIdPwdFind
+	 * @param errors
+	 * @return
+	 */
+	@PostMapping("/IdFind")
+	public ModelAndView IdFindProc(memberIdPwdFind memberIdPwdFind, Errors errors) {
+		ModelAndView mav = new ModelAndView();
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "required", "이메일은 필수 입니다.");
+
+		if (errors.hasErrors()) {
+			mav.setViewName("member/IdFind");
+			return mav;
+		}
+
+		String email = memberIdPwdFind.getEmail();
+		int count = memberProc.IdFindCount(email);
+
+		if (!errors.hasErrors()) {
+			if (count == 1) {
+				String getId = memberProc.IdFind(email);
+				mav.setViewName("member/IdPwdResult");
+				mav.addObject("Id", getId);
+				mav.addObject("Email", email);
+				mav.addObject("find","id");
+			} else {
+				mav.setViewName("member/IdPwdResult");
+				mav.addObject("find","id");
+			}
+		} else {
+			mav.setViewName("member/IdFind");
+		}
+		return mav;
+	}
+
+	/**
+	 * 비밀번호 찾기
+	 * 
+	 * @return
+	 */
+	@GetMapping("/PwdFind")
+	public ModelAndView PwdFindFrom() {
+		return new ModelAndView("member/PwdFind").addObject("memberIdPwdFind", new memberIdPwdFind());
+	}
+
+	/**
+	 * 비밀번호 찾기 Proc
+	 * 
+	 * @param memberIdPwdFind
+	 * @param errors
+	 * @return
+	 */
+	@PostMapping("/PwdFind")
+	public ModelAndView PwdFindProc(memberIdPwdFind memberIdPwdFind, Errors errors) {
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", "required", "아이디는 필수 입니다.");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "required", "이메일은 필수 입니다.");
+		
+		if (errors.hasErrors()) {
+			return new ModelAndView("member/PwdFind");
+		} else {
+			ModelAndView mav = new ModelAndView();
+			int count = memberProc.PwdFindCount(memberIdPwdFind);
+			if (count == 1) {
+				
+				String id = memberIdPwdFind.getId();
+				String email = memberIdPwdFind.getEmail();
+				String pwd = memberProc.PwdFind(memberIdPwdFind); 
+				googleMail.sendMail(id, email, pwd);
+				
+				mav.setViewName("member/IdPwdResult");
+				mav.addObject("find","pwd");
+				mav.addObject("Id",memberIdPwdFind.getId());
+				mav.addObject("Email",memberIdPwdFind.getEmail());
+			} else {
+				
+			}
+
+			return mav;
+		}
+	}
 }

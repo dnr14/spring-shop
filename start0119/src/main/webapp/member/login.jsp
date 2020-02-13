@@ -26,7 +26,7 @@
             <div class="col-md-9 cont">
                 <div class="content">
 					<h1 class="text-center">로그인</h1>
-					<c:url value="/member/login.do" var="path"/>
+					<c:url value="/member/login" var="path"/>
 					<form:form role="form" commandName="memberLoginCheck" action="${path }" method="post">
 						<div class="form-group">
 							<label for="id">아이디 </label> 
@@ -48,7 +48,7 @@
 						<div class="text-center">
 							<button type="submit" class="btn btn-primary w-100">로그인</button>
 							<button type="button" class="btn btn-primary w-100 mt-2" onclick="location.href='${root}/member/IdFind'">아이디 찾기</button>
-							<button type="button" class="btn btn-primary w-100 mt-2" onclick="location.href='${root}/member/IdPwFind'">비밀번호 찾기</button>
+							<button type="button" class="btn btn-primary w-100 mt-2" onclick="location.href='${root}/member/PwdFind'">비밀번호 찾기</button>
 						</div>
 					</form:form>
 				</div>  
