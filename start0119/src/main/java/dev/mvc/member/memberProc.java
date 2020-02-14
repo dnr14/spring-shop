@@ -1,5 +1,7 @@
 package dev.mvc.member;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import dev.mvc.tool.Sha256;
@@ -81,5 +83,21 @@ public class memberProc implements memberProcInter {
 	public int updateKey(String id) {
 		return memberDAO.updateKey(id);
 	}
+
+	@Override
+	public memberVO memberSelect(String id) {
+		return memberDAO.memberSelect(id);
+	}
+
+	@Override
+	public int memberUpdate(memberCreateRequest memberCreateRequest) {
+		return memberDAO.memberUpdate(memberCreateRequest);
+	}
+
+	@Override
+	public int memberPwdUpdate(HashMap<String, Object> map) {
+		return memberDAO.memberPwdUpdate(map);
+	}
+	
 
 }

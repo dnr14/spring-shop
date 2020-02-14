@@ -28,7 +28,7 @@ input[type=checkbox]{  -webkit-transform: scale(2.5); /* Safari and Chrome */  p
 <jsp:include page="/menu/top.jsp" flush='false' />
 			
 		<div class="modal fade" id="myModal" role="dialog">
-		    <div class="modal-dialog" style="width: 700px; height: 800px;">
+		    <div class="modal-dialog" style="width: 700px; height: 500px;">
 		      <div class="modal-content"style="height: 100%;">
 		        <div class="modal-header" style="border: none;">
 		          <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -285,7 +285,7 @@ $(document).ready(function(){
 				      }
 				    }
 				    $.ajax(obj);
-		})		
+		});
 		// 카테고리 수정
 		
 });

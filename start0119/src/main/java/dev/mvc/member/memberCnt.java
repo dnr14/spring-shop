@@ -1,5 +1,7 @@
 package dev.mvc.member;
 
+import java.util.HashMap;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -16,12 +19,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.mvc.tool.MailService;
+import dev.mvc.tool.Sha256;
 
 @Controller
 @RequestMapping(value = "/member")
@@ -268,13 +273,13 @@ public class memberCnt {
 			String id = memberIdPwdFind.getId();
 			String email = memberIdPwdFind.getEmail();
 			String pwd = memberProc.PwdFind(memberIdPwdFind);
-			
+
 			if (count == 1) {
 				googleMail.sendMail(id, email, pwd);
 				mav.addObject("Id", memberIdPwdFind.getId());
 				mav.addObject("Email", memberIdPwdFind.getEmail());
-			} 
-			
+			}
+
 			mav.setViewName("member/IdPwdResult");
 			mav.addObject("find", "pwd");
 			return mav;
@@ -307,6 +312,87 @@ public class memberCnt {
 		}
 		mav.addObject("id", id);
 		return mav;
+	}
+
+	/**
+	 * 회원 수정 화면
+	 * 
+	 * @return
+	 */
+	@GetMapping("/update")
+	public ModelAndView memberUpdateForm(HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		String id = session.getAttribute("id").toString();
+		memberVO vo = memberProc.memberSelect(id); // 회원정보 가져오기
+
+		mav.addObject("memberVO", vo);
+		mav.addObject("memberCreateRequest", new memberCreateRequest());
+		mav.setViewName("member/update");
+		return mav;
+	}
+
+	@PostMapping("/update")
+	public ModelAndView memberUpdateProc(memberCreateRequest memberCreateRequest, Errors errors) {
+		ModelAndView mav = new ModelAndView();
+
+		new RegisterRequestValidator().validate(memberCreateRequest, errors);
+
+		if (errors.hasErrors()) {
+			mav.setViewName("member/update");
+			mav.addObject("memberCreateRequest", memberCreateRequest);
+			mav.addObject("memberVO", memberCreateRequest);
+		} else {
+			memberProc.memberUpdate(memberCreateRequest);// 회원정보 수정
+			mav.setViewName("redirect:/member/update");// 회원정보 조회
+		}
+		return mav;
+	}
+
+	@PostMapping("/pwdUpdate")
+	@ResponseBody
+	public String pwdUpdateAjax(@RequestParam("beforePwd") String beforePwd, @RequestParam("afterPwd") String afterPwd,
+			@RequestParam("afterPwd_Check") String afterPwd_Check, HttpSession session) {
+
+		String id = session.getAttribute("id").toString();
+		memberVO vo = memberProc.memberSelect(id);
+
+		JSONObject json = new JSONObject();
+
+		// 이전 비밀번호 빈값이나 null
+		if (beforePwd.trim().isEmpty() || beforePwd == null) {
+			return json.put("result", "beforePwd_empty").toString();
+		}
+
+		if (afterPwd.trim().isEmpty() || afterPwd == null) {
+			return json.put("result", "afterPwd_empty").toString();
+		}
+
+		if (afterPwd_Check.trim().isEmpty() || afterPwd_Check == null) {
+			return json.put("result", "afterPwd_Check_empty").toString();
+		}
+
+		// 비밀번호가 같다면
+		if (Sha256.encoding(beforePwd).equals(vo.getPwd())) {
+			if (!afterPwd.equals(afterPwd_Check)) {
+				// 
+				json.put("result", "afterPwd_mismatch");
+				return json.toString();
+			}
+			
+			
+			
+			// 비밀번호 변경
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("id", id);
+			map.put("afterPwd", Sha256.encoding(afterPwd));
+			memberProc.memberPwdUpdate(map);
+			
+			json.put("result", "pwd_update");
+
+		} else {
+			json.put("result", "beforePwd_mismatch");
+		}
+		return json.toString();
 	}
 
 }

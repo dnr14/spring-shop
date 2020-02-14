@@ -61,6 +61,9 @@ $(document).ready(function(){
             	<c:if test="${sessionScope.id eq null }">
 	                <li class="nav-item"><a href="${root }/member/create" class="nav-link">회원가입</a></li>
             	</c:if>
+            	<c:if test="${not empty sessionScope.id}">
+	               	 <li class="nav-item"><a href="${root }/member/update" class="nav-link">회원수정</a></li>
+            	</c:if>
                 <li class="nav-item"><a href="${root }/cateGroup/create" class="nav-link">카테고리 관리</a></li>
                 <li class="nav-item"><a href="${root }/stock/create" class="nav-link">재고 관리</a></li>
                 <c:choose>

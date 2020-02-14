@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<c:set value="${pageContext.request.contextPath }" var="root"/>
 
  
 <!DOCTYPE html> 
@@ -9,7 +10,7 @@
 <head> 
 <meta charset="UTF-8"> 
 <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=3.0, width=device-width" /> 
-<title>회원가입 페이지</title>
+<title>회원정보 수정 페이지</title>
  
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
@@ -18,65 +19,145 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
  
 </head> 
- 
+<style>
+	.err{
+		color:red;
+	}
+	
+</style>
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		/* 비밀번호 수정 */
+		$("#beforePwd").submit(function(event) {
+			event.preventDefault();
+			
+			var queryString = $(this).serialize();
+			console.log(queryString);
+			var obj =  {
+				      url : '${root}/member/pwdUpdate',
+				      type : 'post',
+				      cache: false,
+				      async : true,
+				      dataType : "json",
+				      data : queryString,
+				      success : function(rdata) {
+				    	  var result = rdata.result;
+				    	  console.log(result);
+				    	  $("#beforePwdError").css('display','none');
+				    	  $("#afterPwdError").css('display','none');
+				    	  $("#afterPwd_Check_Error").css('display','none');
+				    	  
+				    	  if(result === "pwd_update"){
+				    		  alert("비밀번호가 변경되었습니다.");
+				    	 	  $(".close").trigger("click");
+					    	  location.reload();
+				    	  }else if(result === "beforePwd_mismatch"){
+				    		  $("#beforePwdError").html("비밀번호가 틀렸습니다.").css('display','block');
+				    	  }else if(result === "afterPwd_mismatch"){
+				    		  $("#afterPwdError").html("변경할 비밀번호가 틀렸습니다.").css('display','block');;
+				    	  }else{
+				    		 // empty
+				    		 if(result === "beforePwd_empty"){
+				    	 		  $("#beforePwdError").html("값을 입력해주세요.").css('display','block');
+				    		 }else if(result === "afterPwd_empty"){
+					    		  $("#afterPwdError").html("값을 입력해주세요.").css('display','block');;
+				    		 } else if(result === "afterPwd_Check_empty"){
+					    		  $("#afterPwd_Check_Error").html("값을 입력해주세요.").css('display','block');;
+				    		 }
+				    	  }
+				      },
+				      error : function(request, status, error) { // callback 함수
+				        var msg = 'ERROR<br><br>';
+				        msg += '<strong>request.status</strong><br>' + request.status
+				            + '<hr>';
+				        msg += '<strong>error</strong><br>' + error + '<hr>';
+				        console.log(msg);
+				      }
+				    }
+				    $.ajax(obj);
+		});
+		/*  비밀번호 수정*/
+		
+	});
+</script>
+
 <body>
 <jsp:include page="/menu/top.jsp" flush='false' />
+
+	<!-- 비밀번호 수정 -->
+	<div class="modal fade" id="myModal" role="dialog">
+		    <div class="modal-dialog" style="width: 700px; height: 400px;">
+		      <div class="modal-content"style="height: 100%;">
+		        <div class="modal-header" style="border: none;">
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        </div>
+		        <div class="modal-body">
+		        	<form id="beforePwd">
+		        	<div id="before">
+		        		<h1>비밀번호 입력</h1>
+			        	<div><input type="password" class="form-control" placeholder="이전 비밀번호를 입력하세요." name="beforePwd"></div>
+			        	<div class="mt-2"><span id="beforePwdError" style="display: none; color: red;"></span></div>
+			        	<div class="mt-2"><input type="password" class="form-control" placeholder="변경할 비밀번호를 입력하세요." name="afterPwd" maxlength="8"></div>
+			        	<div class="mt-2"><span id="afterPwdError" style="display: none; color: red;"></span></div>
+			        	<div class="mt-2"><input type="password" class="form-control" placeholder="변경할 비밀번호를 입력하세요." name="afterPwd_Check" maxlength="8"></div>
+			        	<div class="mt-2"><span id="afterPwd_Check_Error" style="display: none; color: red;"></span></div>
+			        	<button type="submit" class="btn btn-primary mt-2">수정</button>
+		        	</div>
+		        	</form>
+		        </div>
+		       </div>
+		      </div>
+		    </div>
+		    <!-- 비밀번호 수정 -->
+
             <div class="col-md-9 cont">
                 <div class="content">
-                    <h3 class="text-center">회원가입</h3>
-                    <c:url value="/member/create" var="path"/>
+                    <h3 class="text-center">회원정보 수정</h3>
+                    <c:url value="/member/update" var="path"/>
                     <form:form  role="form" commandName="memberCreateRequest" action="${path }" method="post">
+                    <c:set value="${memberVO }" var="mem"/>
                         <div class="form-group">
                             <label for="id">아이디 : </label>
-                       	   <form:input type="text" path="id" class="form-control" placeholder="아이디를 입력해주세요." />
-                       	   <div class="mt-2">
-	                           <form:errors path="id" style="color:red"/>
-                       	   </div>
+                       	   <form:input type="text" path="id" class="form-control" value="${mem.id }" readonly="true"/>
+                        </div>
+                        <div class="form-group">
+                        	<!-- RegisterRequestValidator 검사 시 pwd nullpoin Exception 방지 -->
+                       		<form:password class="form-control"  path="pwd"  value="${mem.pwd }"  style="display:none;"/>
+                        </div>
+                        <div class="form-group">
+                        	<!-- RegisterRequestValidator 검사 시 pwd nullpoin Exception 방지 -->
+                            <form:password class="form-control"  path="pwd_check" value="${mem.pwd }" style="display:none;"/>
                         </div>
                         <div class="form-group">
                             <label for="email">이메일 : </label>
-                       	   <form:input type="email" path="email" class="form-control" placeholder="이메일을 입력해주세요."/>
-                     	   <div class="mt-2">
-	                       	   <form:errors path="email" style="color:red"/>
-                     	   </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="pwd">비밀번호 : </label>
-                       		<form:password class="form-control"  path="pwd" placeholder="Password" />
-                       		 <div class="mt-2">
-	                        	<form:errors path="pwd" style="color:red"/>
-                       		 </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="pwd_check">비밀번호 확인 : </label>
-                            <form:password class="form-control"  path="pwd_check" placeholder="Password" />
-                             <div class="mt-2">
-	                         	<form:errors path="pwd_check" style="color:red"/>
-                             </div>
+                       	   <form:input type="email" path="email" class="form-control" value="${mem.email }" readonly="true"/>
                         </div>
                         <div class="form-group">
                             <label for="phone">핸드폰 : </label>
-                       		<form:input type="text" path="phone" class="form-control"/>
+                       		<form:input type="text" path="phone" class="form-control" value="${mem.phone }"/>
                        		 <div class="mt-2">
-	                     		<form:errors path="phone" style="color:red"/>
+	                     		<form:errors path="phone" cssClass="err"/>
                        		 </div>
                         </div>
                         <div class="form-group">
                             <label for="zipcode">주소 : </label>
-                            <form:input type="text" path="zipcode" class="form-control"/>
+                            <form:input type="text" path="zipcode" class="form-control" value="${mem.zipcode }"/>
                             <div class="mt-2">
-	                      		<form:errors path="zipcode" style="color:red"/>
+	                      		<form:errors path="zipcode" cssClass="err"/>
                             </div>
-                            <form:input type="text" path="address1" class="form-control mt-2" />
+                            <form:input type="text" path="address1" class="form-control mt-2" value="${mem.address1 }" />
                              <div class="mt-2">
-	                      		<form:errors path="address1" style="color:red"/>
+	                      		<form:errors path="address1" cssClass="err"/>
                              </div>
-                            <form:input type="text" path="address2" class="form-control mt-2" />
+                            <form:input type="text" path="address2" class="form-control mt-2"  value="${mem.address2 }"/>
                              <div class="mt-2">
-	                      		<form:errors path="address2" style="color:red"/>
+	                      		<form:errors path="address2" cssClass="err"/>
                              </div>
-                      		<div>
-	                            <button type="button" class="btn btn-primary mt-2" onclick="DaumPostcode();">주소 찾기</button>
+                      		<div class="mt-2">
+	                            <button type="button" class="btn btn-primary" onclick="DaumPostcode();">주소 찾기</button>
+	                            <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#myModal">비밀번호 변경</button>
                       		</div>
                         </div>
                         <!-- ----- DAUM 우편번호 API 시작 ----- -->
@@ -84,7 +165,7 @@
 					      <img src="//i1.daumcdn.net/localimg/localimages/07/postcode/320/close.png" id="btnFoldWrap" style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
 					    </div>
                         
-                        <button type="submit" class="btn btn-primary">가입하기</button>
+                        <button type="submit" class="btn btn-primary">회원수정</button>
                     </form:form>
                 </div>
             </div>

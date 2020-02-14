@@ -1,5 +1,7 @@
 package dev.mvc.member;
 
+import java.util.HashMap;
+
 public interface memberDAOInter {
 
 	/**
@@ -63,13 +65,33 @@ public interface memberDAOInter {
 	 */
 	public String selectByKey(String id); 
 	
-	
 	/**
 	 * key update
 	 * @param id
 	 * @return
 	 */
 	public int updateKey(String id);
+	
+	/**
+	 * 회원정보 조회
+	 * @param id
+	 * @return
+	 */
+	public memberVO memberSelect(String id);
+	
+	/**
+	 * 회원정보 수정
+	 * @param memberCreateRequest
+	 * @return
+	 */
+	public int memberUpdate(memberCreateRequest memberCreateRequest);
+	
+	
+	/**
+	 *  비밀번호 변경
+	 * @return
+	 */
+	public int memberPwdUpdate(HashMap<String,Object> map);
 	
 	
 }
