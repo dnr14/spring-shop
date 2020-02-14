@@ -10,6 +10,7 @@ public class  memberCreateRequest{
 	private String zipcode;
 	private String address1;
 	private String address2;
+	private String key;
 	
 	public boolean isPwCheck() {
 		return pwd.equals(pwd_check);
@@ -79,12 +80,14 @@ public class  memberCreateRequest{
 		this.address2 = address2;
 	}
 
-	@Override
-	public String toString() {
-		return "memberCreateRequest [id=" + id + ", email=" + email + ", pwd=" + pwd + ", pwd_check=" + pwd_check
-				+ ", phone=" + phone + ", zipcode=" + zipcode + ", address1=" + address1 + ", address2=" + address2
-				+ "]";
+	public String getKey() {
+		return key;
 	}
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+
 
 	
 	

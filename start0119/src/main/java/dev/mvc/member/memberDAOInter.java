@@ -57,5 +57,19 @@ public interface memberDAOInter {
 	 */
 	public String PwdFind(memberIdPwdFind memberIdPwdFind);
 	
+	/**
+	 * key 가져오기
+	 * @return
+	 */
+	public String selectByKey(String id); 
+	
+	
+	/**
+	 * key update
+	 * @param id
+	 * @return
+	 */
+	public int updateKey(String id);
+	
 	
 }

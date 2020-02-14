@@ -8,9 +8,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!--  아이디 생성 -->    
 	<insert id="create" parameterType="memberCreateRequest">
-		insert into mem(memno, id,email,pwd,phone,zipcode,address1,address2) 
-		values((select nvl(max(memno),0) + 1 as memno from mem) ,#{id}, #{email},  #{pwd},  #{phone} , #{zipcode}, #{address1}, #{address2})
+		insert into mem(memno, id,email,pwd,phone,zipcode,address1,address2,key) 
+		values((select nvl(max(memno),0) + 1 as memno from mem) ,#{id}, #{email},  #{pwd},  #{phone} , #{zipcode}, #{address1}, #{address2}, #{key})
 	</insert>
+	
 	<!--  이메일 중복 확인 -->
 	<select id="selectByEamil" parameterType="String" resultType="int">
 		select count(email)
@@ -27,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 로그인  -->
 	<select id="loginCheck" parameterType="memberLoginCheck" resultType="memberVO">
-		select id,pwd
+		select id,pwd,key
 		from mem
 		where id = #{id}
 	</select>
@@ -52,12 +53,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from mem
 		where email = #{email} and id =#{id}
 	</select>
+	
 	<!--  비밀번호 찾기 -->
 	<select id="PwdFind" parameterType="memberIdPwdFind" resultType="String">
 		select pwd
 		from mem
 		where email = #{email} and id =#{id}
 	</select>
+	
+	<!-- Key 가져오기 -->
+	<select id="selectByKey" parameterType="String" resultType="String">
+		select key
+		from mem
+		where id= #{id}
+	</select>
+	
+	<!-- key Y로 업데이트 -->
+	<update id="updateKey" parameterType="String">
+		update mem set key = 'Y' 
+		where id = #{id}
+	</update>
+	
 	
 	
 </mapper>

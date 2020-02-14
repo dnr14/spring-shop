@@ -9,7 +9,7 @@
 <head> 
 <meta charset="UTF-8"> 
 <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=3.0, width=device-width" /> 
-<title>회원가입 완료</title>
+<title>회원가입 실패</title>
  
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
@@ -23,7 +23,7 @@
 <jsp:include page="/menu/top.jsp" flush='false' />
             <div class="col-md-9 cont">
                 <div class="content">
-                    <h3 class="text-center">${id} 님 회원가입 축하드립니다.</h3>
+                    <h3 class="text-center">${id} 님 이메일 인증에 실패 했습니다.</h3>
                     <div class="text-center mt-5">
                     	<button type="button" class="btn btn-primary" onclick="location.href='./login.do'">로그인</button>
                     	<button type="button" class="btn btn-primary"  onclick="location.href='/photo'">홈 으로</button>

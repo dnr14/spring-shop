@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -44,7 +45,7 @@ public class memberCnt {
 	 * @return
 	 */
 	@GetMapping("/create")
-	public ModelAndView createView(HttpServletRequest request,
+	public ModelAndView createForm(HttpServletRequest request,
 			@CookieValue(value = "create_agree", required = false) Cookie cookie) throws Exception {
 
 		String agree = "N";
@@ -79,14 +80,15 @@ public class memberCnt {
 	 * @throws Exception
 	 */
 	@PostMapping("/create")
-	public ModelAndView create(memberCreateRequest mcr, Errors errors) throws Exception {
-		new RegisterRequestValidator().validate(mcr, errors);
+	public ModelAndView create(memberCreateRequest memberCreateRequest, Errors errors, HttpServletRequest requset)
+			throws Exception {
+		new RegisterRequestValidator().validate(memberCreateRequest, errors);
 		if (errors.hasErrors()) {
 			return new ModelAndView("member/create");
 		}
 
 		try {
-			memberProc.register(mcr);
+			memberProc.register(memberCreateRequest); // 유효성 검사
 		} catch (AlreadyExistingEmailException e) {
 			errors.rejectValue("email", "duplicate", "이미 가입된 이메일입니다.");
 		} catch (AlreadyExistingIdException e) {
@@ -96,8 +98,13 @@ public class memberCnt {
 				return new ModelAndView("member/create");
 			}
 		}
+		// 난수로 만든 key 전송
+		googleMail.sendMemberMail(memberCreateRequest.getId(), memberCreateRequest.getEmail(),
+				memberCreateRequest.getKey(), requset);
+
 		// 회원가입 성공
-		return new ModelAndView("member/createResult");
+		return new ModelAndView("member/authority").addObject("id", memberCreateRequest.getId()).addObject("email",
+				memberCreateRequest.getEmail());
 	}
 
 	/**
@@ -127,7 +134,7 @@ public class memberCnt {
 	 * @return
 	 */
 	@PostMapping("/login")
-	public ModelAndView loginProc(memberLoginCheck mlc, Errors errors, HttpSession session,
+	public ModelAndView loginProc(memberLoginCheck memberLoginCheck, Errors errors, HttpSession session,
 			HttpServletResponse response) {
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", "required", "아이디를 입력하세요.");
@@ -137,31 +144,33 @@ public class memberCnt {
 			return new ModelAndView("member/login");
 		}
 
-		memberVO vo = memberProc.loginCheck(mlc);
+		memberVO vo = memberProc.loginCheck(memberLoginCheck);
 
 		if (vo != null) {
-			if (!mlc.isPwdCheck(vo.getPwd())) {
+			if (!memberLoginCheck.isPwdCheck(vo.getPwd())) {
 				errors.rejectValue("pwd", "bad", "패스워드가 틀립니다.");
 			} else {
 				// 로그인 성공
 				session.setAttribute("id", vo.getId());
+				session.setAttribute("key", vo.getKey());
 
-				String value = "";
 				try {
-					value = new ObjectMapper().writeValueAsString(mlc);
+					String value = new ObjectMapper().writeValueAsString(memberLoginCheck);
+
+					Cookie cookie = new Cookie("REMEMBER", value);
+					cookie.setPath("/");
+					if (memberLoginCheck.getCookieCheck()) {
+						cookie.setMaxAge(60 * 60 * 24);
+					} else {
+						cookie.setMaxAge(0);
+					}
+
+					response.addCookie(cookie);
+					return new ModelAndView("redirect:/");
+
 				} catch (JsonProcessingException e) {
 					e.printStackTrace();
 				}
-				Cookie cookie = new Cookie("REMEMBER", value);
-				cookie.setPath("/");
-				if (mlc.getCookieCheck()) {
-					cookie.setMaxAge(60 * 60 * 24);
-				} else {
-					cookie.setMaxAge(0);
-				}
-
-				response.addCookie(cookie);
-				return new ModelAndView("redirect:/");
 			}
 		} else {
 			errors.rejectValue("id", "bad", "없는 회원 입니다.");
@@ -218,10 +227,10 @@ public class memberCnt {
 				mav.setViewName("member/IdPwdResult");
 				mav.addObject("Id", getId);
 				mav.addObject("Email", email);
-				mav.addObject("find","id");
+				mav.addObject("find", "id");
 			} else {
 				mav.setViewName("member/IdPwdResult");
-				mav.addObject("find","id");
+				mav.addObject("find", "id");
 			}
 		} else {
 			mav.setViewName("member/IdFind");
@@ -250,28 +259,54 @@ public class memberCnt {
 	public ModelAndView PwdFindProc(memberIdPwdFind memberIdPwdFind, Errors errors) {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", "required", "아이디는 필수 입니다.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "required", "이메일은 필수 입니다.");
-		
+
 		if (errors.hasErrors()) {
 			return new ModelAndView("member/PwdFind");
 		} else {
 			ModelAndView mav = new ModelAndView();
 			int count = memberProc.PwdFindCount(memberIdPwdFind);
+			String id = memberIdPwdFind.getId();
+			String email = memberIdPwdFind.getEmail();
+			String pwd = memberProc.PwdFind(memberIdPwdFind);
+			
 			if (count == 1) {
-				
-				String id = memberIdPwdFind.getId();
-				String email = memberIdPwdFind.getEmail();
-				String pwd = memberProc.PwdFind(memberIdPwdFind); 
 				googleMail.sendMail(id, email, pwd);
-				
-				mav.setViewName("member/IdPwdResult");
-				mav.addObject("find","pwd");
-				mav.addObject("Id",memberIdPwdFind.getId());
-				mav.addObject("Email",memberIdPwdFind.getEmail());
-			} else {
-				
-			}
-
+				mav.addObject("Id", memberIdPwdFind.getId());
+				mav.addObject("Email", memberIdPwdFind.getEmail());
+			} 
+			
+			mav.setViewName("member/IdPwdResult");
+			mav.addObject("find", "pwd");
 			return mav;
 		}
 	}
+
+	/**
+	 * 이메일 인증
+	 * 
+	 * @param id
+	 * @param key
+	 * @return
+	 */
+	@GetMapping("/key_alter")
+	public ModelAndView key_alter(@RequestParam("user_id") String id, @RequestParam("user_key") String key) {
+
+		ModelAndView mav = new ModelAndView();
+
+		String getKey = memberProc.selectByKey(id);
+
+		if (key.equals(getKey)) {
+			int count = memberProc.updateKey(id);
+			if (count == 1) {
+				mav.setViewName("member/createResult"); // 인증 성공
+			} else {
+				mav.setViewName("member/createFail"); // 인증 실패
+			}
+		} else {
+			mav.setViewName("member/createFail"); // 인증 실패
+		}
+		mav.addObject("id", id);
+		return mav;
+	}
+
 }

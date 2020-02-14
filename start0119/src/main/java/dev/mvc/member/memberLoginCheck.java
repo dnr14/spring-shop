@@ -1,5 +1,7 @@
 package dev.mvc.member;
 
+import dev.mvc.tool.Sha256;
+
 public class memberLoginCheck {
 	
 	private String id;
@@ -20,9 +22,9 @@ public class memberLoginCheck {
 		return pwd;
 	}
 	public void setPwd(String pwd) {
-		this.pwd = pwd;
+		this.pwd = Sha256.encoding(pwd);
 	}
-
+	
 	public boolean getCookieCheck() {
 		return cookieCheck;
 	}

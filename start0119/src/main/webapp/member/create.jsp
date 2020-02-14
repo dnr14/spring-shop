@@ -24,7 +24,7 @@
             <div class="col-md-9 cont">
                 <div class="content">
                     <h3 class="text-center">회원가입</h3>
-                    <c:url value="/member/create.do" var="path"/>
+                    <c:url value="/member/create" var="path"/>
                     <form:form  role="form" commandName="memberCreateRequest" action="${path }" method="post">
                         <div class="form-group">
                             <label for="id">아이디 : </label>

@@ -24,6 +24,7 @@
             <div class="col-md-9 cont">
                 <div class="content">
                     <h3 class="text-center">${id} 님 회원가입 축하드립니다.</h3>
+                    <h3 class="text-center">${email}로 인증하기 이메일을 보냈습니다.</h3>
                     <div class="text-center mt-5">
                     	<button type="button" class="btn btn-primary" onclick="location.href='./login.do'">로그인</button>
                     	<button type="button" class="btn btn-primary"  onclick="location.href='/photo'">홈 으로</button>

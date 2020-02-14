@@ -1,4 +1,4 @@
-0CREATE TABLE CATEGROUP(
+CREATE TABLE CATEGROUP(
     categrpNo number(10) not null primary key, 
     categrpName varchar(50) not null, 
     categrpCnt number(7) default 0 not null,
@@ -20,10 +20,25 @@ CREATE TABLE stock(
 );
 
 
+ CREATE TABLE MEM(
+    MEMNO NUMBER(25) NOT NULL PRIMARY KEY,
+    ID VARCHAR(50) NOT NULL,
+    EMAIL VARCHAR(100) NOT NULL,
+    ADDRESS1 VARCHAR(100) NOT NULL,
+    ADDRESS2 VARCHAR(100) NOT NULL,
+    ZIPCODE VARCHAR2(100) NOT NULL,
+    PWD VARCHAR(50) NOT NULL,
+    PHONE VARCHAR(100) NOT NULL,
+    KEY VARCHAR(100) NOT NULL,
+    RDATA DATE DEFAULT SYSDATE NOT NULL
+ );
+
+
 -- 할일 
 
-회원가입 비밀번호 암호화
-회원가입 이메일 인증 
+회원가입 이메일 인증 => Y까지 변경 성공 => 
+물건 구매 시 미인증 필요 로직 만들기
+
 회원정보 수정
 회워정보 삭제
 
