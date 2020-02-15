@@ -63,7 +63,7 @@ public class AdminCont {
         return "admin/login_fail";
       }
 
-      return "index";
+      return "redirect:/";
     }
   }
 

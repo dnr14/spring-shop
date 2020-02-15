@@ -94,4 +94,11 @@ public interface memberDAOInter {
 	public int memberPwdUpdate(HashMap<String,Object> map);
 	
 	
+	/**
+	 * 회원 삭제
+	 * @param id
+	 * @return
+	 */
+	public int memberDelete(String id);
+	
 }

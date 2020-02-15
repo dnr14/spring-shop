@@ -22,7 +22,7 @@
 <jsp:include page="/menu/top.jsp" flush='false' />
 		<div class="col-sm-9 cont">
 			<div class="content">
-				<h3 class="text-center">재고 관리 및 등록</h3>
+				<h3 class="text-center mt-2">재고 관리 및 등록</h3>
 				<c:url value="./create" var="path"/>
 				<form:form  role="form" commandName="stockCreateRequest" action="${path }" method="post">
 					<div class="form-group">

@@ -58,32 +58,34 @@ $(document).ready(function(){
         </button>
         <div class="collapse navbar-collapse" id="coll">
             <ul class="navbar-nav">
-            	<c:if test="${sessionScope.id eq null }">
-	                <li class="nav-item"><a href="${root }/member/create" class="nav-link">회원가입</a></li>
-            	</c:if>
-            	<c:if test="${not empty sessionScope.id}">
-	               	 <li class="nav-item"><a href="${root }/member/update" class="nav-link">회원수정</a></li>
-            	</c:if>
-                <li class="nav-item"><a href="${root }/cateGroup/create" class="nav-link">카테고리 관리</a></li>
-                <li class="nav-item"><a href="${root }/stock/create" class="nav-link">재고 관리</a></li>
+            	<c:set value="${sessionScope.id }" var="user_id"/>
+            	<c:set value="${sessionScope.admin_id }" var="admin_id"/>
+				
+				<c:if test="${empty admin_id}">
+	            	<c:choose>
+				        <c:when test="${empty user_id}">
+	 		                 <li class="nav-item"><a href="${root }/member/login" class="nav-link">로그인</a></li>
+			                 <li class="nav-item"><a href="${root }/member/create" class="nav-link">회원가입</a></li>
+		            	</c:when>
+	            		<c:otherwise>
+	            		     <li class="nav-item"><a href="${root }/member/update" class="nav-link">회원수정</a></li>
+	                    	 <li class="nav-item"><a href="${root }/member/logOut" class="nav-link" onclick="alert('로그아웃 되었습니다.');">로그아웃</a></li>
+	            		</c:otherwise>
+	                </c:choose>
+				</c:if>	            	
+                
+                <c:if test="${empty user_id }">
                 <c:choose>
-                	<c:when test="${sessionScope.id eq null }">
-		                <li class="nav-item"><a href="${root }/member/login" class="nav-link">로그인</a></li>
+                	<c:when test="${empty admin_id}">
+                		 <li class="nav-item"><a href="${root }/admin/login" class="nav-link">관리자 로그인</a></li>
                 	</c:when>
                 	<c:otherwise>
-	                	 <li class="nav-item"><a href="${root }/member/logOut" class="nav-link" onclick="alert('로그아웃 되었습니다.');">로그아웃</a></li>
+                		 <li class="nav-item"><a href="${root }/cateGroup/create" class="nav-link">카테고리 관리</a></li>
+               			 <li class="nav-item"><a href="${root }/stock/create" class="nav-link">재고 관리</a></li>
+                		 <li class="nav-item"><a href="${root }/admin/logOut" class="nav-link">관리자 로그아웃</a></li>
                 	</c:otherwise>
                 </c:choose>
-                
-                <c:choose>
-                  <c:when test="${sessionScope.admin_id eq null }">
-		                <li class="nav-item"><a href="${root }/admin/login" class="nav-link">관리자 로그인</a></li>
-                  </c:when>
-                  <c:otherwise>
-		                <li class="nav-item"><a href="${root }/admin/logOut" class="nav-link">관리자 로그아웃</a></li>
-                  </c:otherwise>
-                </c:choose>
-		                <li class="nav-item"><a href="${root }/member/mail" class="nav-link">메일 보내기 테스트</a></li>
+                </c:if>
             </ul>
            	 <div class="dropdown" style="padding-left: 15px;">
 		          <a id="dLabel" data-target="#" href="http://naver.com" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">

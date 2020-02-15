@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,8 +28,12 @@ public class stockCnt {
 		System.out.println("stockCnt ==>  stockCnt 의존성 생성");
 	}
 	
+	/**
+	 * 재고 화면
+	 * @return
+	 */
 	@GetMapping("/create")
-	public ModelAndView stockView() {
+	public ModelAndView stockForm() {
 		return new ModelAndView("/stock/stockView")
 				.addObject("stockCateGroup", cateGroupProc.stockCateGroup())
 				.addObject("stockCreateRequest", new stockCreateRequest());

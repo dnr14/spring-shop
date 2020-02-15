@@ -47,6 +47,7 @@
 						</div>
 						<div class="text-center">
 							<button type="submit" class="btn btn-primary w-100">로그인</button>
+							<button type="button" class="btn btn-primary w-100 mt-2" id="test_id">테스트 아이디</button>
 							<button type="button" class="btn btn-primary w-100 mt-2" onclick="location.href='${root}/member/IdFind'">아이디 찾기</button>
 							<button type="button" class="btn btn-primary w-100 mt-2" onclick="location.href='${root}/member/PwdFind'">비밀번호 찾기</button>
 						</div>
@@ -55,5 +56,16 @@
             </div>
 <jsp:include page="/menu/bottom.jsp" flush='false' />
 </body>
+
+<script type="text/javascript">
+	/*  테스트 아이디 */
+	$(document).ready(function() {
+		$("#test_id").on("click",function(){
+			$("#id").val("dnr14");
+			$("#pwd").val("1234");
+		})	;
+	});
+</script>
+
 </html> 
   

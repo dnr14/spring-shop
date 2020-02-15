@@ -316,7 +316,6 @@ public class memberCnt {
 
 	/**
 	 * 회원 수정 화면
-	 * 
 	 * @return
 	 */
 	@GetMapping("/update")
@@ -348,6 +347,14 @@ public class memberCnt {
 		return mav;
 	}
 
+	/**
+	 *  회원 비밀번호 수정
+	 * @param beforePwd 이전 비밀번호
+	 * @param afterPwd 변경 비밀번호
+	 * @param afterPwd_Check
+	 * @param session
+	 * @return
+	 */
 	@PostMapping("/pwdUpdate")
 	@ResponseBody
 	public String pwdUpdateAjax(@RequestParam("beforePwd") String beforePwd, @RequestParam("afterPwd") String afterPwd,
@@ -379,8 +386,6 @@ public class memberCnt {
 				return json.toString();
 			}
 			
-			
-			
 			// 비밀번호 변경
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("id", id);
@@ -391,6 +396,49 @@ public class memberCnt {
 
 		} else {
 			json.put("result", "beforePwd_mismatch");
+		}
+		return json.toString();
+	}
+
+	/**
+	 * 회원삭제 화면
+	 * @return
+	 */
+	@GetMapping("/delete")
+	public ModelAndView memberDeleteForm() {
+		return new ModelAndView("member/delete");
+	}
+	/**
+	 * 회원삭제 
+	 * @param session
+	 * @param pwd
+	 * @return
+	 */
+	@PostMapping("/delete")
+	@ResponseBody
+	public String memberDeleteAjax(HttpSession session, @RequestParam("pwd") String pwd) {
+		String user_id = session.getAttribute("id").toString();
+		String encoding_pwd = Sha256.encoding(pwd);
+		boolean sw = 	memberProc.memberSelect(user_id).getPwd().equals(encoding_pwd);
+		JSONObject json = new JSONObject();
+		
+		//비밀번호 공백
+		if(pwd.trim().isEmpty() || pwd == null) {
+			return json.put("result", "pwd_null").toString();
+		}
+		//비밀번호 일치 
+		if(sw) {
+			int count = memberProc.memberDelete(user_id);
+			if(count == 1) {
+				// 삭제 성공
+				json.put("result", "delete_success");
+			}else {
+				json.put("result", "delete_fail");
+				// 삭제 실패
+			}
+		//비밀번호 불일치 
+		}else {
+			json.put("result", "pwd_mismatch");
 		}
 		return json.toString();
 	}

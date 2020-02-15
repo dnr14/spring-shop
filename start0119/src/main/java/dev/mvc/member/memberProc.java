@@ -98,6 +98,11 @@ public class memberProc implements memberProcInter {
 	public int memberPwdUpdate(HashMap<String, Object> map) {
 		return memberDAO.memberPwdUpdate(map);
 	}
+
+	@Override
+	public int memberDelete(String id) {
+		return memberDAO.memberDelete(id);
+	}
 	
 
 }
