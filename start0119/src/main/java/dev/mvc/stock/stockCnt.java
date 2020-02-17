@@ -1,5 +1,7 @@
 package dev.mvc.stock;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import dev.mvc.cateGroup.cateGroupProcInter;
 
@@ -34,11 +38,24 @@ public class stockCnt {
 	 */
 	@GetMapping("/create")
 	public ModelAndView stockForm() {
+		
+		for(stockVO vo : stockProc.selectStock()) {
+			System.out.println(vo.toString());
+		}
+		
 		return new ModelAndView("/stock/stockView")
 				.addObject("stockCateGroup", cateGroupProc.stockCateGroup())
-				.addObject("stockCreateRequest", new stockCreateRequest());
+				.addObject("stockCreateRequest", new stockCreateRequest())
+				.addObject("list", stockProc.selectStock());
+		
 	}
 	
+	/**
+	 * 재고 등록
+	 * @param scr
+	 * @param errors
+	 * @return
+	 */
 	@PostMapping("/create")
 	public ModelAndView createProc(stockCreateRequest scr ,Errors errors) {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "stockName", "required", "재고 이름은 필수 입니다.");
@@ -63,5 +80,9 @@ public class stockCnt {
 		stockProc.create(scr);
 		return new ModelAndView("redirect:/stock/create");
 	}
+	
+	
+	
+	
 	
 }

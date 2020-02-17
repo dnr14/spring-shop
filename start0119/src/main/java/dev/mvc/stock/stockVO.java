@@ -1,5 +1,7 @@
 package dev.mvc.stock;
 
+import java.util.StringTokenizer;
+
 public class stockVO {
 	
 	private int stockNo;
@@ -9,12 +11,23 @@ public class stockVO {
 	private int categrpNo;
 	private String manager;
 	private String stockRdate;
+	// 재고에서 join으로 가져오기 위한 프로퍼티
+	private String categrpName;
 	
 	
 	@Override
 	public String toString() {
 		return "stockVO [stockNo=" + stockNo + ", stockCnt=" + stockCnt + ", stockName=" + stockName + ", stockPrice="
-				+ stockPrice + ", categrpNo=" + categrpNo + ", manager=" + manager + ", stockRdate=" + stockRdate + "]";
+				+ stockPrice + ", categrpNo=" + categrpNo + ", manager=" + manager + ", stockRdate=" + stockRdate
+				+ ", categrpName=" + categrpName + "]";
+	}
+
+	public void setCategrpName(String categrpName) {
+		this.categrpName = categrpName;
+	}
+	
+	public String getCategrpName() {
+		return categrpName;
 	}
 	
 	public int getStockNo() {

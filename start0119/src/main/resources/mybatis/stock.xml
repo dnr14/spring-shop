@@ -19,4 +19,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
 	</insert>
 	
+	<!--  재고 가져오기 -->
+	<select id="selectStock" resultType="stockvo">
+		select s.stockno, s.stockcnt, s.stockname, 
+		s.stockprice, s.manager, s.stockrdate, 
+		c.categrpname as categrpname
+		from stock s inner join categroup c
+		on s.categrpno = c.categrpno
+		order by s.stockrdate desc
+	</select>
+	<!--  재고 가져오기 -->
+	
 </mapper>

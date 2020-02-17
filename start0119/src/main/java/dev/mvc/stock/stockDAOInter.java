@@ -1,5 +1,7 @@
 package dev.mvc.stock;
 
+import java.util.List;
+
 public interface stockDAOInter {
 	
 	/**
@@ -9,4 +11,10 @@ public interface stockDAOInter {
 	 */
 	public int create(stockCreateRequest request);
 
+	/**
+	 * 재고 가져오기
+	 * @return
+	 */
+	public List<stockVO> selectStock();
+	
 }

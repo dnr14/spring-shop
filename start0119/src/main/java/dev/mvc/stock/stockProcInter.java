@@ -1,5 +1,7 @@
 package dev.mvc.stock;
 
+import java.util.List;
+
 public interface stockProcInter {
 
 	/**
@@ -8,4 +10,12 @@ public interface stockProcInter {
 	 * @return
 	 */
 	public int create(stockCreateRequest request);
+	
+	
+	/**
+	 * 재고 가져오기
+	 * @return
+	 */
+	public List<stockVO> selectStock();
+	
 }

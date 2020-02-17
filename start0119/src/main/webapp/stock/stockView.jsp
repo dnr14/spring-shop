@@ -56,7 +56,7 @@
 					</div>
 					<div class="form-group">
 						<label for="manager">등록자</label>
-						<c:set value="${sessionScope.id}" var="manager"/>
+						<c:set value="${sessionScope.admin_id}" var="manager"/>
 						<form:input path="manager" type="text"  value="${manager }" class="form-control" />
 						<div class="mt-2">
 							<form:errors path="manager" style="color:red"/>
@@ -67,6 +67,36 @@
 					</div>
 				</form:form>
 			</div>
+			
+			<!-- 등록된 상품 보기 -->
+			<table class="table">
+				<thead>
+					<tr>
+						<th>상품<br>No</th>
+						<th>카테고리</th>
+						<th>상품<br>이름</th>
+						<th>상품<br>가격</th>
+						<th>상품<br>갯수</th>
+						<th>등록자</th>
+						<th>등록일</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<c:forEach var="list" items="${list }">
+						<tr>
+							<td>${list.stockNo }</td>
+							<td>${list.categrpName }</td>
+							<td>${list.stockName }</td>
+							<td>${list.stockPrice }</td>
+							<td>${list.stockCnt }</td>
+							<td>${list.manager }</td>
+							<td>${list.stockRdate }</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+			
 		</div>
 <jsp:include page="/menu/bottom.jsp" flush='false' />
 </body>
