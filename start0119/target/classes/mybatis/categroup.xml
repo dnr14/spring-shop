@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
 	</insert>
 	
-	<!--  카테로기 목록 호출 -->
+	<!--  카테고리 목록 호출 -->
 	<select id="list" resultType="cateGroupVO">
 		select categrpno,categrpname,categrpcnt,categrpseqno,categrpvisible,categrprdate
 		from categroup
@@ -72,6 +72,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select categrpname,categrpno
 		from categroup
 	</select>
+	
+	
 	
 	
 	

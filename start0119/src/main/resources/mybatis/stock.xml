@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<!--  재고 가져오기 -->
-	<select id="selectStock" resultType="stockvo">
+	<select id="selectStock" resultType="stockVO">
 		select s.stockno, s.stockcnt, s.stockname, 
 		s.stockprice, s.manager, s.stockrdate, 
 		c.categrpname as categrpname
@@ -28,6 +28,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		on s.categrpno = c.categrpno
 		order by s.stockrdate desc
 	</select>
-	<!--  재고 가져오기 -->
+	
+	<!-- 재고 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete 
+		from stock
+		where stockno = #{stockNo}
+	</delete>
+	
+	<!--  재고 수정  불러오기 -->
+	<select id="update" parameterType="int" resultType="stockVO">
+		select s.stockno, s.stockcnt, s.stockname, s.stockprice, s.manager, s.stockrdate, c.categrpname as categrpname
+		from stock s inner join categroup c
+		on s.categrpno = c.categrpno
+		where s.stockno = #{stockNo}
+	</select>
+	
+	<!--  재고 수정 -->
+	<update id="updateProc" parameterType="stockVO">
+		update stock set stockname = #{stockName} , stockprice = #{stockPrice} , stockcnt = #{stockCnt} , categrpno = #{categrpNo}
+		where stockno = #{stockNo}
+	</update>
+	
 	
 </mapper>

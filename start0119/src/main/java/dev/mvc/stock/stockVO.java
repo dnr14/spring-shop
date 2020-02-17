@@ -1,7 +1,5 @@
 package dev.mvc.stock;
 
-import java.util.StringTokenizer;
-
 public class stockVO {
 	
 	private int stockNo;

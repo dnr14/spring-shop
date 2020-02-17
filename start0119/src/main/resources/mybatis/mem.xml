@@ -92,6 +92,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where id = #{id}
 	</update>
 	
+	
+	<!--  회원 삭제 -->
 	<delete id="memberDelete" parameterType="String">
 		delete
 		from mem

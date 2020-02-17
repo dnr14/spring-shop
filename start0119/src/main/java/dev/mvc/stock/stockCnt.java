@@ -1,7 +1,9 @@
 package dev.mvc.stock;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -9,10 +11,13 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.mvc.cateGroup.cateGroupProcInter;
 
@@ -38,10 +43,6 @@ public class stockCnt {
 	 */
 	@GetMapping("/create")
 	public ModelAndView stockForm() {
-		
-		for(stockVO vo : stockProc.selectStock()) {
-			System.out.println(vo.toString());
-		}
 		
 		return new ModelAndView("/stock/stockView")
 				.addObject("stockCateGroup", cateGroupProc.stockCateGroup())
@@ -82,6 +83,72 @@ public class stockCnt {
 	}
 	
 	
+	
+	/**
+	 * 재고 삭제
+	 * @param map
+	 * @return
+	 */
+	@PostMapping("/delete")
+	@ResponseBody
+	public String stockDeleteAjax(@RequestBody HashMap<String,ArrayList<Integer>> map) {
+		JSONObject json = new JSONObject();
+		
+		ArrayList<Integer> list = (ArrayList<Integer>)map.get("array");
+		
+		int count = 0;
+		
+		for(int stockNo : list) {
+			count += stockProc.delete(stockNo);
+		}
+		
+		if(count != list.size()) {
+			json.put("result", "재고 일부를 삭제하지 못했습니다.");
+		}else {
+			json.put("result", "재고를 삭제 했습니다.");
+		}
+		
+		return json.toString();
+	}
+	
+	
+	/**
+	 * 재고 수정 불러오기
+	 * @param stockNo
+	 * @return
+	 */
+	@PostMapping(value="/update",produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String stockUpdateAjax(int stockNo) {
+		JSONObject json = new JSONObject();
+		
+		try {
+			String string = "";
+			string = new ObjectMapper().writeValueAsString(stockProc.update(stockNo));
+			json.put("stockVO", string);
+			json.put("cateGroup", cateGroupProc.stockCateGroup());
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	
+	
+		/**
+		 * 재고 수정 Proc
+		 * @param stockNo
+		 * @return
+		 */
+		@PostMapping(value="/updateProc", produces = "text/plain;charset=UTF-8")
+		@ResponseBody
+		public String stockUpdateProcAjax(stockVO stockVO) {
+			JSONObject json = new JSONObject();
+			int count = stockProc.updateProc(stockVO);
+			json.put("count", count);
+			return json.toString();
+		}
+		
 	
 	
 	

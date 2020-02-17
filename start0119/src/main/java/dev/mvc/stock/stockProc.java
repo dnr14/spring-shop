@@ -20,6 +20,23 @@ public class stockProc implements stockProcInter{
 	public List<stockVO> selectStock() {
 		return stockDAO.selectStock();
 	}
+
+	@Override
+	public int delete(int stockNo) {
+		return stockDAO.delete(stockNo);
+	}
+
+	@Override
+	public stockVO update(int stockNo) {
+		return stockDAO.update(stockNo);
+	}
+
+	@Override
+	public int updateProc(stockVO stockVO) {
+		return stockDAO.updateProc(stockVO);
+	}
+	
+	
 	
 
 }

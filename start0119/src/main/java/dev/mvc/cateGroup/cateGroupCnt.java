@@ -129,7 +129,9 @@ public class cateGroupCnt {
 	@ResponseBody
 	@PostMapping(value="/cateGroupUpdateProc", produces="text/plain;charset=UTF-8")
 	public String cateGroupUpdateProc(cateGroupVO vo) {
+		System.out.println(vo.toString());
 		int count = cateGroupProc.cateGroupUpdateProc(vo);
+		System.out.println(count);
 		JSONObject jsonobject = new JSONObject();
 		jsonobject.put("count", count);
 		return jsonobject.toString();
