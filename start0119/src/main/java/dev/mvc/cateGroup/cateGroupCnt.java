@@ -137,11 +137,14 @@ public class cateGroupCnt {
 		return jsonobject.toString();
 	}
 	
+	/**
+	 * 네브바 목록
+	 * @return
+	 */
 	@ResponseBody
 	@GetMapping(value="/cateGroupTopList", produces="text/plain;charset=UTF-8")
 	public String cateGroupTopList() {
-		return new JSONObject
-				().put("list", cateGroupProc.cateGroupTopList())
+		return new JSONObject().put("list", cateGroupProc.cateGroupTopList())
 				.toString();
 	}
 

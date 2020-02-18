@@ -9,7 +9,7 @@
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
-		<java-version>1.6</java-version>
+		<java-version>1.8</java-version>
 		<org.springframework-version>4.3.14.RELEASE
 		</org.springframework-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
@@ -39,6 +39,12 @@
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
+			<version>${org.aspectj-version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
 			<version>${org.aspectj-version}</version>
 		</dependency>
 
@@ -241,6 +247,8 @@
 
 	</dependencies>
 	<!-- ******************** 추가 선언 영역 종료 ******************** -->
+
+
 
 	<build>
 		<plugins>

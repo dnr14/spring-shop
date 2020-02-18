@@ -60,4 +60,11 @@ public interface cateGroupDAOInter {
 	 */
 	public List<cateGroupVO> stockCateGroup();
 	
+	/**
+	 * 카테고리 cnt up
+	 * @param categrpno
+	 * @return
+	 */
+	public int cateGroupCntUp(int categrpno);
+	
 }

@@ -34,6 +34,34 @@ CREATE TABLE stock(
  );
 
 
+CREATE TABLE contents(
+    categrpno number(10) not null, --카테고리 고유 번호 FK
+    contentsno number(10) not null, -- 판매글 고유 번호 PK
+    stockno number(10) not null, -- 재고 고유 번호 FK
+    title varchar(100) not null, -- 제목
+    keyword varchar(30) null, -- 제품 검색어
+    likey number(10) default 0, -- 제품에 좋아요
+    deliveryCharge number(10) not null, -- 제품 배송비 
+    cnt number(10) default 0, -- 제품을 눌러본 조회수
+    rdate date default sysdate not null, -- 제품 등록날짜
+    manager varchar(20) not null, -- 상품 내용을 등록한 직원
+    contents varchar(1024) not null, -- 제품 상세 소개
+    primary key(contentsno),
+    FOREIGN key(stockno) REFERENCES stock(stockno)
+);
+
+CREATE TABLE CONTENTS_FILE
+(
+    file_no number(10) not null primary key,
+    contents_no number(10) not null,
+    fname varchar2(50) not null,
+    fupname varchar2(50),
+    thumb varchar2(50),
+    fsize number(20) not null,
+    fdata date default sysdate not null,
+    foreign key(contents_no) REFERENCES contents(contentsno)
+);
+
 -- 할일 
 
 회원가입 이메일 인증 => Y까지 변경 성공 => 물건 구매 시 미인증 필요 로직 만들기
@@ -42,12 +70,11 @@ CREATE TABLE stock(
 
 관리자 페이지
 
-재고 삭제 수정
 재고 페이징
-
 
 재고 => 상품 등록 => 메인페이지 ==> 관리자 ==> 결제  ==> 
 
+상품 뿌려주기 = > 상품 상세 읽기 => 상품 수정 => 상품 삭제
 
 
 

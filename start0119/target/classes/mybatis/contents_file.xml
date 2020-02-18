@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="dev.mvc.contents.ContentsFileDAOInter"> 
+	
+	<!-- 파일 업로드 -->
+	<insert id="create" parameterType="HashMap">
+		insert into contents_file
+		<choose>
+			 <when test="thumb == null">
+				(file_no,contents_no,fname,fupname,fsize)
+				values
+				(
+				    (select nvl(max(file_no),0) +1 file_no from contents_file),
+				    #{contentsNo},
+				    #{fname},
+				    #{fupname},
+				    #{fsize}
+				)
+			</when>
+			<otherwise>
+				(file_no,contents_no,fname,thumb,fsize)
+				values
+				(
+				    (select nvl(max(file_no),0) +1 file_no from contents_file),
+				    #{contentsNo},
+				    #{fname},
+				    #{thumb},
+				    #{fsize}
+				)
+			</otherwise>
+		</choose>
+	</insert>
+	
+	<select id="list" resultType="ContentsVO">
+		SELECT c.title, c.keyword, c.likey, c.cnt,cf.thumb
+		FROM CONTENTS C INNER JOIN contents_file CF
+		ON c.contentsno = cf.contents_no
+		WHERE cf.thumb IS NOT NULL
+	</select>
+	
+	
+</mapper>

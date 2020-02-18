@@ -119,16 +119,16 @@ public class memberCnt {
 	 */
 	@GetMapping("/login")
 	public ModelAndView loginView(@CookieValue(value = "REMEMBER", required = false) Cookie cookie) {
-		memberLoginCheck mlc = new memberLoginCheck();
+		memberLoginCheck memberLoginCheck = new memberLoginCheck();
 
 		if (cookie != null) {
 			JSONObject jsonObject = new JSONObject(cookie.getValue());
-			mlc.setId(jsonObject.get("id").toString());
-			mlc.setPwd(jsonObject.get("pwd").toString());
-			mlc.setCookieCheck(true);
+			memberLoginCheck.setId(jsonObject.get("id").toString());
+			memberLoginCheck.setPwd(jsonObject.get("pwd").toString());
+			memberLoginCheck.setCookieCheck(true);
 		}
 
-		return new ModelAndView("member/login").addObject("memberLoginCheck", mlc);
+		return new ModelAndView("member/login").addObject("memberLoginCheck", memberLoginCheck);
 	}
 
 	/**

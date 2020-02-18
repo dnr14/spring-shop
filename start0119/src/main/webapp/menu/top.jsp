@@ -25,6 +25,9 @@ $(document).ready(function(){
 		      async : true,
 		      dataType : "json",
 		      success : function(rdata) {
+		    	  $(".dropdown-menu").append(
+	    	  			'<li role="presentation"><a role="menuitem" tabindex="-1" href="${root}/contents/list" style="padding-left:10px;">전체 목록</a></li>'
+		    	  	);
 		    	  $.each(rdata.list, function(i, item) {
 		    		  /* 나중에 url 나오면 쓰기 */
 		    	  	$(".dropdown-menu").append(
@@ -82,6 +85,7 @@ $(document).ready(function(){
                 	<c:otherwise>
                 		 <li class="nav-item"><a href="${root }/cateGroup/create" class="nav-link">카테고리 관리</a></li>
                			 <li class="nav-item"><a href="${root }/stock/create" class="nav-link">재고 관리</a></li>
+               			 <li class="nav-item"><a href="${root }/contents/create" class="nav-link">상품 등록</a></li>
                 		 <li class="nav-item"><a href="${root }/admin/logOut" class="nav-link">관리자 로그아웃</a></li>
                 	</c:otherwise>
                 </c:choose>

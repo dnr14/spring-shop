@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="dev.mvc.contents.ContentsDAOInter"> 
+	
+	<!-- 상품 가져오기 -->
+	<select id="CateGroupAjax" parameterType="int" resultType="stockVO">
+		select stockno,stockname
+		from stock 
+		where categrpno = #{categrpno}
+		order by stockrdate desc
+	</select>
+	
+	<!-- 내용 등록 -->
+	<insert id="create" parameterType="ContentsCreateDto">
+		insert into contents
+		( contentsno, categrpno, stockno, title, keyword, deliveryCharge, manager, contents)
+		values(
+		 (select nvl(max(contentsno),0)+1 as contentsno from contents ),
+		 #{categrpNo},
+		 #{stockNo},
+		 #{title},
+		 #{keyword},
+		 #{deliveryCharge},
+		 #{manager},   
+		 #{contents}
+		)
+	</insert>
+	
+	<!-- 등록한 게시글 번호 가져오기 -->
+	<select id="cotentsNoSelect" resultType="int">
+		select max(contentsno) as contentsno from contents
+	</select>
+	
+	
+	
+	
+</mapper>

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("cateGroupProc")
+@Component
 public class cateGroupProc implements cateGroupProcInter{
 	
 	@Autowired
@@ -54,6 +54,11 @@ public class cateGroupProc implements cateGroupProcInter{
 	@Override
 	public List<cateGroupVO> stockCateGroup() {
 		return cateGroupDAO.stockCateGroup();
+	}
+
+	@Override
+	public int cateGroupCntUp(int categrpno) {
+		return cateGroupDAO.cateGroupCntUp(categrpno);
 	}
 
 	

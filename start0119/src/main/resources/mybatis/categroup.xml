@@ -32,8 +32,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 카테고리 삭제 -->
 	<delete id="cateGroupDelete" parameterType="int">
-		DELETE from categroup 
-		where categrpno = #{categrpno}
+			DELETE from categroup 
+			where categrpno = #{categrpno}
 	</delete>
 	
 	
@@ -74,6 +74,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	
+	<!-- 카테고리 cnt up -->
+	<update id="cateGroupCntUp" parameterType="int">
+		update categroup set categrpcnt = categrpcnt +1 where categrpno = #{categrpno}
+	</update>	
 	
 	
 	
