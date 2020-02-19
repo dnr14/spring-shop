@@ -37,9 +37,16 @@ public class CotentsProc implements ContentsProcInter{
 		return ContentsFileDAO.create(map);
 	}
 
+
 	@Override
-	public List<ContentsVO> list() {
-		return ContentsFileDAO.list();
+	public int pagingCount() {
+		return ContentsDAO.pagingCount();
 	}
+
+	@Override
+	public List<ContentsVO> list(HashMap<String, Object> map) {
+		return ContentsFileDAO.list(map);
+	}
+
 
 }

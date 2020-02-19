@@ -16,5 +16,5 @@ public interface ContentsFileDAOInter {
 	 * 게시글 가져오기
 	 * @return
 	 */
-	public List<ContentsVO> list();
+	public List<ContentsVO> list(HashMap<String,Object> map );
 }

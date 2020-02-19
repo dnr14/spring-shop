@@ -36,6 +36,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	
+	<select id="pagingCount" resultType="int">
+		select count(row_cnt) as count
+		from (
+		    select ROW_NUMBER() OVER(ORDER BY rdate desc) AS row_cnt, 
+		    title, keyword, cf.thumb, cnt, likey
+		    from contents c Inner join contents_file cf
+		    on c.contentsno = cf.contents_no
+		    where cf.thumb is not null
+		)
+	</select>
+	
+	<select id="">
+	
+	</select>
+	
 	
 	
 </mapper>

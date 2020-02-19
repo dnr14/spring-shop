@@ -25,5 +25,10 @@ public interface ContentsDAOInter {
 	 */
 	public int cotentsNoSelect();
 	
+	/**
+	 * ÆäÀÌÂ¡ ÃÑ ÆäÀÌÁö
+	 * @return
+	 */
+	public int pagingCount();
 
 }

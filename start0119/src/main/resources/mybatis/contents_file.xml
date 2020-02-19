@@ -35,11 +35,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</choose>
 	</insert>
 	
-	<select id="list" resultType="ContentsVO">
-		SELECT c.title, c.keyword, c.likey, c.cnt,cf.thumb
-		FROM CONTENTS C INNER JOIN contents_file CF
-		ON c.contentsno = cf.contents_no
-		WHERE cf.thumb IS NOT NULL
+	<select id="list" resultType="ContentsVO" parameterType="HashMap">
+		select *
+		from (
+		    select ROW_NUMBER() OVER(ORDER BY rdate desc) AS row_cnt, 
+		    title, keyword, cf.thumb, cnt, likey
+		    from contents c Inner join contents_file cf
+		    on c.contentsno = cf.contents_no
+		    where cf.thumb is not null
+		)
+		where row_cnt BETWEEN #{startPageNum} and ${endPageNum}
 	</select>
 	
 	

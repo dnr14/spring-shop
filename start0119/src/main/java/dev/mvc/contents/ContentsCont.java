@@ -1,5 +1,6 @@
 package dev.mvc.contents;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,11 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import dev.mvc.cateGroup.cateGroupProcInter;
+import dev.mvc.tool.PageMaker;
 import dev.mvc.tool.Tool;
 import dev.mvc.tool.Upload;
 
@@ -155,7 +158,7 @@ public class ContentsCont {
 			return new ModelAndView("contents/contentsFail").addObject("error", "글 등록 실패");
 		}
 
-		return new ModelAndView("contents/create");
+		return new ModelAndView("redirect:/contents/list");
 	}
 
 	/**
@@ -172,18 +175,50 @@ public class ContentsCont {
 		return json.toString();
 	}
 	
+	/**
+	 * 게시글 뿌려주기
+	 * @return
+	 */
 	@GetMapping("/list")
-	public ModelAndView list() {
+	public ModelAndView list(
+			@RequestParam(value="pagenum", defaultValue = "1")  int pagenum
+			) {
 		
-		for(ContentsVO vo :   ContentsProc.list()) {
+		PageMaker pagemaker = new PageMaker();
+		
+		// 전체 게시글 개수를 지정한다.
+		pagemaker.setTotalcount(ContentsProc.pagingCount());
+		// 현재 페이지를 페이지 객체에 저장한다.
+		pagemaker.setPagenum(pagenum);
+		// 현재 페이지 블록 몇번인지 현재 페이지 번호를 통해서 지정
+		pagemaker.setCurrentblock(pagenum);
+		// 마지막 블록 번호를 전체 게시글 수를 통해서 정한다.
+		pagemaker.setLastblock(pagemaker.getTotalcount());
+		
+		pagemaker.setStartPageNum(pagenum);
+		pagemaker.setEndPageNum(pagenum);
+		
+		pagemaker.setStartPage(pagemaker.getCurrentblock());
+		pagemaker.setEndPage(pagemaker.getLastblock(), pagemaker.getCurrentblock());
+
+		pagemaker.prevnext(pagenum);
+		
+		List<ContentsVO> list = new ArrayList<ContentsVO>();
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("startPageNum", pagemaker.getStartPageNum());
+		map.put("endPageNum", pagemaker.getEndPageNum());
+		
+		list = ContentsProc.list(map);
+		
+		for(ContentsVO vo : list) {
 			System.out.println(vo.toString());
 		}
 		
-		return new ModelAndView("redirect:/");
+		return new ModelAndView("contents/list")
+				.addObject("list", list)
+				.addObject("page", pagemaker);
 	}
-	
-	
-	
 	
 
 }
