@@ -46,10 +46,6 @@ public class cateGroupProc implements cateGroupProcInter{
 		return cateGroupDAO.cateGroupUpdateProc(vo);
 	}
 
-	@Override
-	public List<String> cateGroupTopList() {
-		return cateGroupDAO.cateGroupTopList();
-	}
 
 	@Override
 	public List<cateGroupVO> stockCateGroup() {
@@ -59,6 +55,17 @@ public class cateGroupProc implements cateGroupProcInter{
 	@Override
 	public int cateGroupCntUp(int categrpno) {
 		return cateGroupDAO.cateGroupCntUp(categrpno);
+	}
+
+	@Override
+	public List<cateGroupVO> cateGroupTopList() {
+		// TODO Auto-generated method stub
+		return cateGroupDAO.cateGroupTopList();
+	}
+
+	@Override
+	public String select(String categrpNo) {
+		return cateGroupDAO.select(categrpNo);
 	}
 
 	

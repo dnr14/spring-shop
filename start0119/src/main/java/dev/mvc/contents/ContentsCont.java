@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +30,7 @@ import dev.mvc.tool.Upload;
 @RequestMapping("/contents")
 public class ContentsCont {
 
+	
 	// 기본 생성자로 주입
 	@Autowired
 	@Qualifier("ContentsProc") // id값으로 찾아서 주입
@@ -175,50 +175,95 @@ public class ContentsCont {
 		return json.toString();
 	}
 	
+
 	/**
-	 * 게시글 뿌려주기
-	 * @return
+	 * 게시판 뿌려주기
+	 * @param pagenum 보여줄 화면 번호
+	 * @param categrpno 보여줄 카테고리 번호 default 0  값이 0이면 전체 목록 Mybatis에 조건 문으로 처리
+	 * @return 검색된 화면 페이징되어서 보여준다.
 	 */
 	@GetMapping("/list")
 	public ModelAndView list(
-			@RequestParam(value="pagenum", defaultValue = "1")  int pagenum
+			@RequestParam(value="pagenum", defaultValue = "1")  int pagenum,
+			@RequestParam(value="categrpno" , defaultValue="0") String categrpno,
+			@RequestParam(value ="title", defaultValue="") String title
 			) {
 		
-		PageMaker pagemaker = new PageMaker();
+		HashMap<String,Object> categrpSearch = new HashMap<String,Object>();
+		categrpSearch.put("categrpno", categrpno);
+		categrpSearch.put("title", title);
 		
-		// 전체 게시글 개수를 지정한다.
-		pagemaker.setTotalcount(ContentsProc.pagingCount());
-		// 현재 페이지를 페이지 객체에 저장한다.
-		pagemaker.setPagenum(pagenum);
-		// 현재 페이지 블록 몇번인지 현재 페이지 번호를 통해서 지정
-		pagemaker.setCurrentblock(pagenum);
-		// 마지막 블록 번호를 전체 게시글 수를 통해서 정한다.
-		pagemaker.setLastblock(pagemaker.getTotalcount());
-		
-		pagemaker.setStartPageNum(pagenum);
-		pagemaker.setEndPageNum(pagenum);
-		
-		pagemaker.setStartPage(pagemaker.getCurrentblock());
-		pagemaker.setEndPage(pagemaker.getLastblock(), pagemaker.getCurrentblock());
+		int totalcount = ContentsProc.pagingCount(categrpSearch);
+		System.out.println(totalcount);
+		if(totalcount != 0) {
+			PageMaker pagemaker = new PageMaker();
+			pagemaker.setTotalcount(totalcount); // 총 페이지 갯수
+			
+			// 현재 페이지를 페이지 객체에 저장한다.
+			pagemaker.setPagenum(pagenum);
+			// 현재 페이지 블록 몇번인지 현재 페이지 번호를 통해서 지정
+			pagemaker.setCurrentblock(pagenum);
+			// 마지막 블록 번호를 전체 게시글 수를 통해서 정한다.
+			pagemaker.setLastblock(pagemaker.getTotalcount());
+			
+			pagemaker.setStartPageNum(pagenum);
+			pagemaker.setEndPageNum(pagenum);
+			
+			pagemaker.setStartPage(pagemaker.getCurrentblock());
+			pagemaker.setEndPage(pagemaker.getLastblock(), pagemaker.getCurrentblock());
 
-		pagemaker.prevnext(pagenum);
-		
-		List<ContentsVO> list = new ArrayList<ContentsVO>();
-		HashMap<String,Object> map = new HashMap<String,Object>();
-		
-		map.put("startPageNum", pagemaker.getStartPageNum());
-		map.put("endPageNum", pagemaker.getEndPageNum());
-		
-		list = ContentsProc.list(map);
-		
-		for(ContentsVO vo : list) {
-			System.out.println(vo.toString());
+			pagemaker.prevnext(pagenum);
+			
+			List<ContentsVO> list = new ArrayList<ContentsVO>();
+			HashMap<String,Object> map = new HashMap<String,Object>();
+			
+			map.put("startPageNum", pagemaker.getStartPageNum());
+			map.put("endPageNum", pagemaker.getEndPageNum());
+			map.put("categrpno", categrpno);
+			map.put("title", title);
+			
+			list = ContentsProc.list(map);
+			String categrpName = cateGroupProc.select(categrpno);
+			
+			return new ModelAndView("contents/list")
+					.addObject("list", list)
+					.addObject("page", pagemaker)
+					.addObject("categrpno",categrpno)
+					.addObject("title", title)
+					.addObject("categrpName", categrpName);
 		}
-		
-		return new ModelAndView("contents/list")
-				.addObject("list", list)
-				.addObject("page", pagemaker);
+		else
+		{
+			// 화면에 뿌려줄 게시글이 0개일때
+			return new ModelAndView("contents/list");
+		}
 	}
 	
-
+	/**
+	 * 게시판 읽기
+	 * @return
+	 */
+	@GetMapping("/read")
+	public ModelAndView read(int contentsNo) {
+		
+		ModelAndView mav = new ModelAndView("/contents/read");
+		ContentsVO contentsVO = ContentsProc.read(contentsNo);
+		System.out.println(contentsVO.getContentsNo());
+		mav.addObject("contentsVO", contentsVO);
+		
+		return mav;
+	}
+	
+	@GetMapping("read_file")
+	public @ResponseBody String readFileAjax(int contentsNo) {
+		JSONObject json = new JSONObject();
+		List<ContentsVO> list = ContentsProc.contentsImageLoad(contentsNo);
+		System.out.println(list);
+		json.put("file_read", list);
+		return json.toString();
+	}
+	
+	
+	
+	
 }

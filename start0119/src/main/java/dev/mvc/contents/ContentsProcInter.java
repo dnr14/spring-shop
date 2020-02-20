@@ -38,11 +38,19 @@ public interface ContentsProcInter {
 	 * @return
 	 */
 	public List<ContentsVO> list(HashMap<String,Object> map );
-	
 	/**
 	 * 페이징 총 페이지
 	 * @return
 	 */
-	public int pagingCount();
+	public int pagingCount(HashMap<String, Object> map);
+	
+	/**
+	 * 게시판 상세불러오기
+	 * @param contentsNo
+	 * @return
+	 */
+	public ContentsVO read(int contentsNo);
+	
+	public List<ContentsVO> contentsImageLoad(int contentsNo);
 	
 }

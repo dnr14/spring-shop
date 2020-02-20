@@ -1,5 +1,6 @@
 package dev.mvc.contents;
 
+import java.util.HashMap;
 import java.util.List;
 
 import dev.mvc.stock.stockVO;
@@ -29,6 +30,13 @@ public interface ContentsDAOInter {
 	 * 페이징 총 페이지
 	 * @return
 	 */
-	public int pagingCount();
+	public int pagingCount(HashMap<String,Object> map);
+	
+	/**
+	 * 게시판 상세불러오기
+	 * @param contentsNo
+	 * @return
+	 */
+	public ContentsVO read(int contentsNo);
 
 }

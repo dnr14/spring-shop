@@ -23,7 +23,6 @@
  
 <body>
 <jsp:include page="/menu/top.jsp" flush='false' />
-			
             <div class="col-md-9 cont">
 				<div class="content">
 					<h3 class="text-center">
@@ -37,15 +36,18 @@
 					</c:choose>
 					</h3>
 					<div class="mt-3 text-center">
-						<form class="form-group" action="" method="get">
+						<c:url var="path" value="./list?pagenum=1&categrpno="/>
+						<form class="form-group" action="${path }" method="get">
 						<span>검색 : </span>
-						<input type="search" class="form-control" style="width: 400px;display: inline;">
+						<input type="search" class="form-control" style="width: 400px;display: inline;" placeholder="검색어를 입력하세요." name="title">
+						<input type="hidden" name="categrpno">
+						<input type="hidden" name="pagenum">
 						<button class="btn btn-primary">찾기</button>						
 						</form>						
 					</div>
 					<div class="mt-3">
 						 <c:forEach var="list" items="${list}">
-							<div class="main" 
+							<div class="main" onclick="location.href='${root}/contents/read?contentsNo=${list.contentsNo}'"
 							style="width: 30%; float: left; text-align: center; 
 							border: 1px solid; margin:  0 1.6% 20px 1.6%; 
 							border-radius:4px; cursor: pointer;" onclick="console.log('디버그')">
@@ -66,13 +68,15 @@
 					</div>
 					<div class="mt-2 text-center" style="clear: both;">
 						<c:if test="${page.prev }">
-							<a style="text-decoration: none; " href="./list?pagenum=${page.startPage - 1}" >&laquo;</a>
+							<a style="text-decoration: none; " href="./list?pagenum=${page.startPage - 1}&categrpno=${categrpno}&title=${title}" >&laquo;</a>
 						</c:if>
 						<c:forEach begin="${page.startPage}" end="${page.endPage}" var="idx">
-							<a style="text-decoration: none; " href="./list?pagenum=${idx}" >${idx }</a>
+							<c:if test="${idx != 0}">
+								<a style="text-decoration: none; " href="./list?pagenum=${idx}&categrpno=${categrpno}&title=${title}" >${idx }</a>
+							</c:if>
 						</c:forEach>
 						<c:if test="${page.next }">
-							<a style="text-decoration: none; " href="./list?pagenum=${page.endPage + 1}" >&raquo;</a>
+							<a style="text-decoration: none; " href="./list?pagenum=${page.endPage + 1}&categrpno=${categrpno}&title=${title}" >&raquo;</a>
 						</c:if>
 					</div>
 				</div>

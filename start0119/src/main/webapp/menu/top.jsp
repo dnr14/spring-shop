@@ -25,13 +25,14 @@ $(document).ready(function(){
 		      async : true,
 		      dataType : "json",
 		      success : function(rdata) {
+		    	  var list = rdata.list;	  
 		    	  $(".dropdown-menu").append(
 	    	  			'<li role="presentation"><a role="menuitem" tabindex="-1" href="${root}/contents/list" style="padding-left:10px;">전체 목록</a></li>'
 		    	  	);
-		    	  $.each(rdata.list, function(i, item) {
+		    	  $.each(list, function(i, item) {
 		    		  /* 나중에 url 나오면 쓰기 */
 		    	  	$(".dropdown-menu").append(
-		    	  			'<li role="presentation"><a role="menuitem" tabindex="-1" href="#" style="padding-left:10px;">'+item+'</a></li>'
+		    	  			'<li role="presentation"><a role="menuitem" tabindex="-1" href="${root}/contents/list?pagenum=1&categrpno='+item.categrpNo+'&title=" style="padding-left:10px;">'+item.categrpName+'</a></li>'
 		    	  	);
 		    	  });
 		      },

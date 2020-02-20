@@ -52,7 +52,7 @@ public interface cateGroupDAOInter {
 	 * 카테고리 네브바 목록
 	 * @return
 	 */
-	public List<String> cateGroupTopList();
+	public List<cateGroupVO> cateGroupTopList();
 	
 	/**
 	 * 재고 등록 카테고리 호출
@@ -67,4 +67,10 @@ public interface cateGroupDAOInter {
 	 */
 	public int cateGroupCntUp(int categrpno);
 	
+	/**
+	 * 카테고리 이름 호출
+	 * @param categrpNo
+	 * @return
+	 */
+	public String select(String categrpNo);
 }

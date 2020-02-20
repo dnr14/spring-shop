@@ -19,7 +19,36 @@ public class ContentsVO {
 	private String thumb;
 	private long fsize;
 	private String fdata;
+	private String categrpName;
+	private String stockName;
+	private int stockPrice;
+	private int stockCnt;
 	
+	
+	public String getCategrpName() {
+		return categrpName;
+	}
+	public void setCategrpName(String categrpName) {
+		this.categrpName = categrpName;
+	}
+	public String getStockName() {
+		return stockName;
+	}
+	public void setStockName(String stockName) {
+		this.stockName = stockName;
+	}
+	public int getStockPrice() {
+		return stockPrice;
+	}
+	public void setStockPrice(int stockPrice) {
+		this.stockPrice = stockPrice;
+	}
+	public int getStockCnt() {
+		return stockCnt;
+	}
+	public void setStockCnt(int stockCnt) {
+		this.stockCnt = stockCnt;
+	}
 	public int getCategrpNo() {
 		return categrpNo;
 	}

@@ -144,8 +144,7 @@ public class cateGroupCnt {
 	@ResponseBody
 	@GetMapping(value="/cateGroupTopList", produces="text/plain;charset=UTF-8")
 	public String cateGroupTopList() {
-		return new JSONObject().put("list", cateGroupProc.cateGroupTopList())
-				.toString();
+		return new JSONObject().put("list", cateGroupProc.cateGroupTopList()).toString();
 	}
 
 }

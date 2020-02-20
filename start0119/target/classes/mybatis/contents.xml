@@ -36,21 +36,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	
-	<select id="pagingCount" resultType="int">
+	<!-- 게시글 총 갯수 -->
+	<!--  카테고리에 따라 유동적으로 -->
+	<select id="pagingCount" parameterType="HashMap" resultType="int" >
 		select count(row_cnt) as count
 		from (
 		    select ROW_NUMBER() OVER(ORDER BY rdate desc) AS row_cnt, 
 		    title, keyword, cf.thumb, cnt, likey
 		    from contents c Inner join contents_file cf
 		    on c.contentsno = cf.contents_no
-		    where cf.thumb is not null
+		    where cf.thumb is not null 
+		    <if test="categrpno >0">
+				    and c.categrpno = #{categrpno}
+		    </if>
+		    <if test="title != null">
+		    	  and c.TITLE LIKE '%'||#{title}||'%' 
+		    </if>
 		)
 	</select>
 	
-	<select id="">
-	
+	<!-- 게시판 상세 불러오기 -->
+	<select id="read" parameterType="int" resultType="ContentsVO">
+	SELECT c.categrpname , s.stockname, s.stockprice, s.stockcnt,
+	p.title, p.deliverycharge, p.contentsno, p.contents
+	FROM CATEGROUP C INNER JOIN CONTENTS P
+	ON c.categrpno = P.CATEGRPNO INNER JOIN STOCK S
+	ON p.stockno = s.stockno
+	WHERE p.contentsno = #{contentsno}
 	</select>
-	
 	
 	
 </mapper>

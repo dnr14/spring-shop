@@ -17,4 +17,7 @@ public interface ContentsFileDAOInter {
 	 * @return
 	 */
 	public List<ContentsVO> list(HashMap<String,Object> map );
+	
+	
+	public List<ContentsVO> contentsImageLoad(int contentsNo);
 }

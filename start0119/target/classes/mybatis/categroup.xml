@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 카테고리 사이드 메뉴 -->
 	<select id="cateGroupSideList" resultType="cateGroupVO">
-		select categrpname,categrpcnt,categrpseqno
+		select categrpname,categrpcnt,categrpseqno,categrpno
 		from categroup
 		where categrpvisible = 'Y'
 		order by categrpseqno asc
@@ -60,8 +60,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<!-- 카테고리 네브바 목록  -->
-	<select id="cateGroupTopList" resultType="String">
-		select categrpname
+	<select id="cateGroupTopList" resultType="cateGroupVO">
+		select categrpname,categrpno
 		from categroup
 		where categrpvisible = 'Y'
 		order by categrpseqno asc
@@ -79,6 +79,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update categroup set categrpcnt = categrpcnt +1 where categrpno = #{categrpno}
 	</update>	
 	
-	
+	<!-- 카테고리 이름 -->
+	<select id="select" parameterType="String" resultType="String">
+		select categrpname from categroup where  categrpno = #{ categrpno } 
+	</select>
 	
 </mapper>

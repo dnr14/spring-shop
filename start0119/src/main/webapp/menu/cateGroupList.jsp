@@ -5,8 +5,8 @@
         <h2 class="text-center">카테고리</h2>
            <p class="text-center">원하시는 제품을 찾아보세요!!</p>
            <ul class="list-group">
-           		<c:forEach var="cateGroupSideList" items="${cateGroupSideList}">
-         			   <li class="list-group-item list-group-itme-action"><a href="#">${cateGroupSideList.categrpName} (${cateGroupSideList.categrpCnt})</a></li>
+           		<c:forEach var="list" items="${cateGroupSideList}">
+         			   <li class="list-group-item list-group-itme-action"><a href="${root }/contents/list?pagenum=1&categrpno=${list.categrpNo}&title=">${list.categrpName} (${list.categrpCnt})</a></li>
            		</c:forEach>
            </ul>
   

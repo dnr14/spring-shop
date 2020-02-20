@@ -38,15 +38,32 @@ public class CotentsProc implements ContentsProcInter{
 	}
 
 
-	@Override
-	public int pagingCount() {
-		return ContentsDAO.pagingCount();
-	}
 
 	@Override
 	public List<ContentsVO> list(HashMap<String, Object> map) {
 		return ContentsFileDAO.list(map);
 	}
+
+	@Override
+	public int pagingCount(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		return ContentsDAO.pagingCount(map);
+	}
+
+	@Override
+	public ContentsVO read(int contentsNo) {
+		return ContentsDAO.read(contentsNo);
+	}
+
+	@Override
+	public List<ContentsVO> contentsImageLoad(int contentsNo) {
+		return ContentsFileDAO.contentsImageLoad(contentsNo);
+	}
+
+	
+	
+
+
 
 
 }

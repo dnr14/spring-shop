@@ -35,16 +35,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</choose>
 	</insert>
 	
+	<!-- 게시판 뿌려주기 -->
 	<select id="list" resultType="ContentsVO" parameterType="HashMap">
 		select *
 		from (
 		    select ROW_NUMBER() OVER(ORDER BY rdate desc) AS row_cnt, 
-		    title, keyword, cf.thumb, cnt, likey
+		    c.title, c.keyword, cf.thumb, c.cnt, c.likey, c.contentsno
 		    from contents c Inner join contents_file cf
 		    on c.contentsno = cf.contents_no
-		    where cf.thumb is not null
+		    where cf.thumb is not null 
+		    <if test="categrpno > 0">
+			    and c.categrpno = #{categrpno}
+		    </if>
+		    <if test="title != null">
+			     and c.TITLE LIKE '%'||#{title}||'%' 
+		    </if>
 		)
 		where row_cnt BETWEEN #{startPageNum} and ${endPageNum}
+	</select>
+	
+	
+	<select id="contentsImageLoad" parameterType="int" resultType="ContentsVO">
+		SELECT cf.fupname
+		FROM contents C INNER JOIN contents_file CF
+		ON c.contentsno = cf.contents_no
+		WHERE c.contentsno = #{ CONTENTSNO } and cf.fupname is not null
 	</select>
 	
 	
