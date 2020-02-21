@@ -55,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	
+	<!-- 이미지만 가져오기 -->
 	<select id="contentsImageLoad" parameterType="int" resultType="ContentsVO">
 		SELECT cf.fupname
 		FROM contents C INNER JOIN contents_file CF
@@ -62,5 +63,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE c.contentsno = #{ CONTENTSNO } and cf.fupname is not null
 	</select>
 	
+	<!-- 이미지 썸네일 모두 가져오기 -->
+	<select id="imagesAllLoad" parameterType="int" resultType="ContentsVO">
+		SELECT CONTENTS_NO AS CONTENSTNO, thumb, fupname FROM contents_file WHERE contents_no = #{contentsNo}
+	</select>
+	
+	
+	
+	<!-- 이미지 한개씩 삭제 -->
+	<delete id="imageDelete" parameterType="HashMap">
+		DELETE FROM CONTENTS_FILE WHERE CONTENTS_NO = #{ contentsno } 
+		<if test="fupname != null">
+			AND FUPNAME = #{ fupname }
+		</if>
+		<if test="thumb != null">
+			AND thumb = #{ thumb }
+		</if>
+	</delete>
+		
 	
 </mapper>

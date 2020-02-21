@@ -14,7 +14,6 @@
 <title>게시판 상세</title>
  
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
@@ -207,17 +206,40 @@ function comma(num){
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+function contentsDelete(){
+	
+	$.ajax({
+		url : "./delete",
+		type : "post",
+		cache : false,
+		async : true,
+		dataType : "json",
+		data : "contentsNo=" + $("#contentsNo").val(),
+		success : function(data){
+			
+		},
+		errors : function(request, status, error){
+			console.log(status);
+			console.log(request);
+			console.log(error);
+		}
+	});
+	
+}
+function deleteCancel(){
+	  $(".deleteClose").trigger("click");
+}
 
 </script> 
  
  <style type="text/css">
 input:focus {outline:none;}
-
+	
 </style>
  
 <body>
 <jsp:include page="/menu/top.jsp" flush='false' />
-
+			
 			
 			<div class="modal fade" id="myModal" role="dialog">
 			    <div class="modal-dialog" style="width: 700px; height: 500px;">
@@ -226,18 +248,44 @@ input:focus {outline:none;}
 			          <button type="button" class="close" data-dismiss="modal">&times;</button>
 			        </div>
 			        <div class="modal-body">
-			          <img src="./image/noimage.png" style="width: 100%; height: 100%;" id="modal-img"/>
+			          <img src="./image/noimage.png" style="width: 100%; height: 400px;" id="modal-img"/>
 			        </div>
 			      </div>
 			   </div>
 		   </div>
-
+			
+			<div class="modal fade" id="deleteModal" role="dialog">
+				<div class="modal-dialog" style="width: 300px; height: 250px; margin-top: 100px;">
+					<div class="modal-content" style="height: 100%;">
+						<div class="modal-header" style="border: none;">
+							<button type="button" class="deleteClose close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body text-center">
+							<p>게시글이 삭제됩니다,<br> 
+							정말로 삭제 하시겠습니까?<br>
+							복구 할수 없습니다.</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" onclick="contentsDelete()">삭제</button>
+							<button type="button" class="btn btn-danger" onclick="deleteCancel()">취소</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
             <div class="col-md-9 cont">
 				<div class="content">
 					<h3 class="text-center">
 						게시글 상세
 					</h3>
+					
+					<c:if test="${not empty sessionScope.admin_id }">
+					<div class="text-right">
+						<a href="./images_update?contentsNo=${contentsVO.contentsNo}"><span class="label label-primary">썸네일 / 이미지 수정</span></a> |
+					    <a href="./update?contentsNo=${contentsVO.contentsNo}"><span class="label label-primary">상품 수정</span></a> |
+					    <a href="./delete?contentsNo=${contentsVO.contentsNo}" data-toggle="modal" data-target="#deleteModal"><span class="label label-danger">상품 삭제</span></a>
+					</div>
+					</c:if>
 					
 					<div style="margin: 30px 0 10px 0;" class="row">
 				        <!-- 이미지 -->
@@ -452,7 +500,7 @@ input:focus {outline:none;}
 	        </nav>
 	         <div style="margin-top: 10px; margin-bottom: 20px; font-size: 0.8em;">
 	            <h3>교환 및 반품안내</h3>
-	            <img src="./image/menu.jpg">
+	            <img src="./image/menu.jpg" style="width: 100%;">
 	            <div style="font-size: 0.8em; margin: 10px 0 10px 0;">
 	              <strong>환불안내</strong><br>
 	              - 환불관련 자세한 사항은 카카오톡 @올라펫 또는 올라펫샵 서비스센터 1544-7867 로 문의주시기 바랍니다.<br><br>
@@ -498,6 +546,8 @@ input:focus {outline:none;}
 	      <input type="hidden" value="${contentsVO.stockName }" id="productrepositoryname">
 	      <!-- 구매자 -->
 	      <input type="hidden" value="${sessionScope.id }" id="memberid">
+	      
+	      <input type="hidden" value="${contentsVO.contentsNo}" id="contentsNo">
 		   
 
 <jsp:include page="/menu/bottom.jsp" flush='false' />

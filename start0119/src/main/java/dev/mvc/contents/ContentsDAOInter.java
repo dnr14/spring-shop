@@ -2,6 +2,7 @@ package dev.mvc.contents;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import dev.mvc.stock.stockVO;
 
@@ -38,5 +39,6 @@ public interface ContentsDAOInter {
 	 * @return
 	 */
 	public ContentsVO read(int contentsNo);
-
+	public int update(Map<String, Object> map);	
+	public int delete(int contentNo);
 }

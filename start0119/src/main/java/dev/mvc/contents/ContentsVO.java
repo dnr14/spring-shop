@@ -154,9 +154,7 @@ public class ContentsVO {
 	@Override
 	public String toString() {
 		return "ContentsVO [title=" + title + ", keyword=" + keyword + ", likey=" + likey + ", cnt=" + cnt + ", thumb="
-				+ thumb + "]";
+				+ thumb + ", fupname="+ fupname  +"]";
 	}
-	
-	
 
 }

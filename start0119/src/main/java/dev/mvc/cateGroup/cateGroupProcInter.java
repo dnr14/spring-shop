@@ -73,4 +73,5 @@ public interface cateGroupProcInter {
 	 * @return
 	 */
 	public String select(String categrpNo);
+	public int cateGroupCntDown(int contentsno);
 }

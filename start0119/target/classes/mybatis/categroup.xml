@@ -79,6 +79,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update categroup set categrpcnt = categrpcnt +1 where categrpno = #{categrpno}
 	</update>	
 	
+	<update id="cateGroupCntDown" parameterType="int">
+		update categroup set categrpcnt = categrpcnt - 1 where categrpno = #{categrpno}
+	</update>	
+	
 	<!-- 카테고리 이름 -->
 	<select id="select" parameterType="String" resultType="String">
 		select categrpname from categroup where  categrpno = #{ categrpno } 

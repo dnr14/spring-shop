@@ -2,6 +2,7 @@ package dev.mvc.contents;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -59,11 +60,20 @@ public class CotentsProc implements ContentsProcInter{
 	public List<ContentsVO> contentsImageLoad(int contentsNo) {
 		return ContentsFileDAO.contentsImageLoad(contentsNo);
 	}
-
-	
-	
-
-
-
-
+	@Override
+	public List<ContentsVO> imagesAllLoad(int contentsNo){
+		return ContentsFileDAO.imagesAllLoad(contentsNo);
+	}
+    @Override
+	public int imageDelete(HashMap<String,Object> map) {
+    	return ContentsFileDAO.imageDelete(map);
+    }
+    @Override
+    public int update(Map<String, Object> map) {
+    	return ContentsDAO.update(map);
+    }
+    @Override
+    public int delete(int contentsNo) {
+    	return ContentsDAO.delete(contentsNo);
+    }
 }
