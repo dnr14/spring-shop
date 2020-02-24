@@ -69,8 +69,8 @@ public class cateGroupProc implements cateGroupProcInter{
 	}
 
 	@Override
-	public int cateGroupCntDown(int contentsno) {
-		return cateGroupDAO.cateGroupCntDown(contentsno);
+	public int cateGroupCntDown(int categrpNo) {
+		return cateGroupDAO.cateGroupCntDown(categrpNo);
 	}
 
 	

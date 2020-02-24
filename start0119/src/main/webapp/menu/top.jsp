@@ -1,8 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="root" value="${pageContext.request.contextPath}" />
-
-
 <script type="text/javascript">
 $(document).ready(function(){
 	
@@ -72,6 +70,7 @@ $(document).ready(function(){
 			                 <li class="nav-item"><a href="${root }/member/create" class="nav-link">회원가입</a></li>
 		            	</c:when>
 	            		<c:otherwise>
+	            		     <li class="nav-item"><a href="${root }/basket/list" class="nav-link">장바구니</a></li>
 	            		     <li class="nav-item"><a href="${root }/member/update" class="nav-link">회원수정</a></li>
 	                    	 <li class="nav-item"><a href="${root }/member/logOut" class="nav-link" onclick="alert('로그아웃 되었습니다.');">로그아웃</a></li>
 	            		</c:otherwise>
@@ -84,6 +83,7 @@ $(document).ready(function(){
                 		 <li class="nav-item"><a href="${root }/admin/login" class="nav-link">관리자 로그인</a></li>
                 	</c:when>
                 	<c:otherwise>
+                		 <li class="nav-item"><a href="${root }/admin/user" class="nav-link">유저 관리</a></li>
                 		 <li class="nav-item"><a href="${root }/cateGroup/create" class="nav-link">카테고리 관리</a></li>
                			 <li class="nav-item"><a href="${root }/stock/create" class="nav-link">재고 관리</a></li>
                			 <li class="nav-item"><a href="${root }/contents/create" class="nav-link">상품 등록</a></li>

@@ -1,6 +1,9 @@
 package dev.mvc.member;
 
 import java.util.HashMap;
+import java.util.List;
+
+import dev.mvc.tool.UserPageMaker;
 
 public interface memberProcInter {
 
@@ -109,5 +112,9 @@ public interface memberProcInter {
 	 * @return
 	 */
 	public int memberDelete(String id);
+	
+	public List<memberVO> userAll(UserPageMaker userPageMaker);
+	public int userTotal();
+
 	
 }

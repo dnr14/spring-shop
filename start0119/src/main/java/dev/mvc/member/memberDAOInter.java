@@ -1,6 +1,9 @@
 package dev.mvc.member;
 
 import java.util.HashMap;
+import java.util.List;
+
+import dev.mvc.tool.UserPageMaker;
 
 public interface memberDAOInter {
 
@@ -100,5 +103,8 @@ public interface memberDAOInter {
 	 * @return
 	 */
 	public int memberDelete(String id);
+	
+	public List<memberVO> userAll(UserPageMaker userPageMaker);
+	public int userTotal();
 	
 }

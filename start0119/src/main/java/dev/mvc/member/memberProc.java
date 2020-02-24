@@ -1,10 +1,12 @@
 package dev.mvc.member;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import dev.mvc.tool.Sha256;
+import dev.mvc.tool.UserPageMaker;
 
 @Component("memberProc")
 public class memberProc implements memberProcInter {
@@ -103,6 +105,16 @@ public class memberProc implements memberProcInter {
 	public int memberDelete(String id) {
 		return memberDAO.memberDelete(id);
 	}
+
+	@Override
+	public List<memberVO> userAll(UserPageMaker userPageMaker) {
+		return memberDAO.userAll(userPageMaker);
+	}
+	@Override
+	public int userTotal() {
+		return memberDAO.userTotal();
+	}
+	
 	
 
 }

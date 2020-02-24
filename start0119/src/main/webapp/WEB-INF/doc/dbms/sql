@@ -7,27 +7,27 @@ CREATE TABLE CATEGROUP(
     categrpRdate date default sysdate not null 
 );
 
-CREATE TABLE stock(
-    stockNo number(10) not null, -- 재고 고유번호
-    stockCnt number(10) not null, -- 재고 수량
-    stockName varchar(50) not null, -- 재고 이름
-    stockPrice number(10) not null, -- 재고 가격
-    categrpNo number(10) not null, -- 카테고리 번호
-    manager varchar(20) not null, -- 재고 등록한 직원
-    stockRdate date default sysdate not null, -- 재고 등록날짜
-    primary key(stockNo),
-    foreign key (categrpNo) references CATEGROUP(categrpNo)
+CREATE TABLE BASKET(
+    BASKETNO NUMBER(10) NOT NULL,
+    STOCKNO NUMBER(10) NOT NULL,
+    contentsno number(10) not null,
+    TITLE VARCHAR(100) NOT NULL,
+    CNT NUMBER(10) NOT NULL,
+    MEMBERID VARCHAR2(10) NOT NULL,
+    URI VARCHAR(100) NOT NULL,
+    RDATE DATE DEFAULT SYSDATE NOT NULL,
+    PRIMARY KEY(BASKETNO),
+    FOREIGN KEY(MEMBERID) REFERENCES MEM(ID)
 );
-
 
  CREATE TABLE MEM(
     MEMNO NUMBER(25) NOT NULL PRIMARY KEY,
-    ID VARCHAR(50) NOT NULL,
+    ID VARCHAR(50) NOT NULL UNIQUE,
     EMAIL VARCHAR(100) NOT NULL,
     ADDRESS1 VARCHAR(100) NOT NULL,
     ADDRESS2 VARCHAR(100) NOT NULL,
     ZIPCODE VARCHAR2(100) NOT NULL,
-    PWD VARCHAR(50) NOT NULL,
+    PWD VARCHAR(100) NOT NULL, -- 암호화때문에 사이즈 신경
     PHONE VARCHAR(100) NOT NULL,
     KEY VARCHAR(100) NOT NULL,
     RDATA DATE DEFAULT SYSDATE NOT NULL
@@ -68,17 +68,12 @@ CREATE TABLE CONTENTS_FILE
 
 회원정보 수정 => 비밀번호 제한 
 
-관리자 페이지
+결제  ==> 
 
-재고 페이징
+유저 
+댓글 대댓글 자기가 쓴 댓글 몰아 보기
+별점
 
-재고 => 상품 등록 => 메인페이지 ==> 관리자 ==> 결제  ==> 
-
-상품 수정 => 상품 삭제
-바로구매 / 장바구니 
-
-
-
-
+바로구매
 
 

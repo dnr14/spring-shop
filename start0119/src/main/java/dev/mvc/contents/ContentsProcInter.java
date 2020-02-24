@@ -57,6 +57,7 @@ public interface ContentsProcInter {
 	public int imageDelete(HashMap<String,Object> map);
 	public int update(Map<String, Object> map);
 	public int delete(int contentNo);
+	public List<ContentsVO> index_list();
 
 	
 }

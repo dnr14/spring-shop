@@ -1,5 +1,6 @@
 package dev.mvc.stock;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,9 @@ public class stockProc implements stockProcInter{
 	}
 
 	@Override
-	public List<stockVO> selectStock() {
-		return stockDAO.selectStock();
+	public List<stockVO> selectStock(HashMap<String, Object> map){
+		return stockDAO.selectStock(map);
 	}
-
 	@Override
 	public int delete(int stockNo) {
 		return stockDAO.delete(stockNo);
@@ -36,6 +36,10 @@ public class stockProc implements stockProcInter{
 		return stockDAO.updateProc(stockVO);
 	}
 	
+	@Override
+	public int selectStockCount() {
+		return stockDAO.selectStockCount();
+	}
 	
 	
 

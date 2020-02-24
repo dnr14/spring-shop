@@ -25,7 +25,9 @@
     value="dev.mvc.member,
     dev.mvc.cateGroup,
     dev.mvc.stock,
-    dev.mvc.contents"/>
+    dev.mvc.contents,
+    dev.mvc.tool,
+    dev.mvc.basket"/>
     <!-- /src/main/resources/mybatis 폴더 -->
     <property name="mapperLocations" value="classpath:mybatis/*.xml" />
   </bean>
@@ -52,6 +54,4 @@
     </props>
     </property>
    </bean> -->
-   <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
-   <aop:config></aop:config>
 </beans>

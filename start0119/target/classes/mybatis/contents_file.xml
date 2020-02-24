@@ -80,6 +80,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND thumb = #{ thumb }
 		</if>
 	</delete>
-		
+	
+	<!-- INDEX페이지 LIST -->
+	<select id="index_list" resultType="ContentsVO">
+		SELECT * 
+		FROM(
+			SELECT ROW_NUMBER() OVER(ORDER BY C.RDATE DESC) AS ROW_NUM, 
+			C.TITLE, C.KEYWORD, C.LIKEY, C.CNT, C.CONTENTSNO ,CF.THUMB
+			FROM CONTENTS C INNER JOIN contents_file CF
+			ON c.categrpno = cf.contents_no
+			WHERE c.likey > 5 AND cf.thumb IS NOT NULL
+		)
+		WHERE ROW_NUM BETWEEN 1 AND 9
+	</select>
 	
 </mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.mvc.basket.BasketDAOInter">
+
+	<insert id="create" parameterType="HashMap">
+		INSERT INTO basket(BASKETNO ,
+		STOCKNO, TITLE, CNT, MEMBERID, URI, contentsNo)
+		VALUES(
+		(SELECT NVL(MAX(BASKETNO),0) +1 AS BASKETNO FROM BASKET),
+		#{stockNo },
+		#{stockName },
+		#{ stockCnt},
+		#{ memberId},
+		#{ uri},
+		#{contentsNo}
+		)
+	</insert>
+
+	<select id="count" parameterType="HashMap" resultType="int">
+		SELECT count(*) as count FROM
+		BASKET
+		WHERE stockno = #{ stockNo } AND memberid = #{ memberId }
+	</select>
+	
+	<select id="fivecount" parameterType="String" resultType="int">
+		SELECT count(*) as count FROM BASKET
+		WHERE memberid = #{memberid}
+	</select>
+	
+	<select id="getbasket" parameterType="String" resultType="BasketVO">
+		select b.basketno, b.title, b.cnt, b.memberid, b.uri, b.rdate, cf.thumb from basket b inner join contents_file cf
+		on b.contentsno = cf.contents_no
+		where cf.thumb is not null and b.memberid = #{memberid}
+	</select>
+	
+	<delete id="delete" parameterType="HashMap">
+		DELETE FROM BASKET 
+		WHERE BASKETNO = #{basketNo} AND MEMBERID= #{memberId}
+	</delete>
+	
+
+</mapper>

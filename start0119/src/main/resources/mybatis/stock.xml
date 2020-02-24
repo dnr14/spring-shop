@@ -20,13 +20,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<!--  재고 가져오기 -->
-	<select id="selectStock" resultType="stockVO">
-		select s.stockno, s.stockcnt, s.stockname, 
-		s.stockprice, s.manager, s.stockrdate, 
-		c.categrpname as categrpname
-		from stock s inner join categroup c
-		on s.categrpno = c.categrpno
-		order by s.stockrdate desc
+	<select id="selectStock" resultType="stockVO" parameterType="HashMap">
+		select *
+		from
+		(
+		    select ROW_NUMBER() OVER(ORDER BY s.stockrdate DESC) ROW_NUM, s.stockno, s.stockcnt, s.stockname, 
+		    s.stockprice, s.manager, s.stockrdate, 
+		    c.categrpname as categrpname
+		    from stock s inner join categroup c
+		    on s.categrpno = c.categrpno
+		)
+		WHERE ROW_NUM BETWEEN #{startPageNum} AND #{endPageNum}
+	</select>
+	
+	<select id="selectStockCount" resultType="int">
+		SELECT COUNT(*) AS COUNT 
+		FROM STOCK
 	</select>
 	
 	<!-- 재고 삭제 -->

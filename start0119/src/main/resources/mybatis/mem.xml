@@ -100,6 +100,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where id = #{id}
 	</delete>
 	
+	<!--  유저 페이징  -->
+	<select id="userAll" parameterType="UserPageMaker" resultType="memberVO">
+		SELECT *
+		FROM(
+		SELECT ROW_NUMBER() OVER(ORDER BY RDATA DESC) AS ROW_NUM  
+		,ID,EMAIL, rdata
+		FROM MEM
+		)WHERE ROW_NUM BETWEEN #{startPageNum } AND #{endPageNum}
+	</select>
+	
+	<!-- 유저 총 수 -->
+	<select id="userTotal" resultType="int">
+		SELECT COUNT(*)
+		FROM MEM
+	</select>
+	
+	
 	
 	
 	

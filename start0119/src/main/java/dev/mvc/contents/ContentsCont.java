@@ -423,42 +423,53 @@ public class ContentsCont {
 	}
 
 	@PostMapping("/delete")
-	public @ResponseBody String deleteAjax(int contentsNo) {
-		System.out.println(contentsNo);
-		HashMap<String, Object> map = new HashMap<>();
+	public @ResponseBody String deleteAjax(int contentsNo, HttpServletRequest request) {
+		String Dir = Tool.getRealPath(request, "/contents/storage");
+		JSONObject json = new JSONObject();
 
 		ContentsProc.imagesAllLoad(contentsNo).stream().forEach(c -> {
 			if (c.getThumb() != null) {
 				// 썸네일
 				String thumb = c.getThumb();
-				boolean pass = Tool.deleteFile("contents/storge", thumb);
+				boolean pass = Tool.deleteFile(Dir, thumb);
 				if (pass) {
-					map.put("contentsno", contentsNo);
-					map.put("thumb", thumb);
-					ContentsProc.imageDelete(map);
+					HashMap<String, Object> thumb_map = new HashMap<String, Object>();
+					thumb_map.put("contentsno", contentsNo);
+					thumb_map.put("thumb", thumb);
+					int count = ContentsProc.imageDelete(thumb_map);
+					if (count > 0)
+						System.out.println("썸네일 디비 삭제");
 				}
 			} else if (c.getFupname() != null) {
+				HashMap<String, Object> image_map = new HashMap<String, Object>();
 				// 이미지
 				String fupname = c.getFupname();
-				boolean pass = Tool.deleteFile("contents/storge", fupname);
+				boolean pass = Tool.deleteFile(Dir, fupname);
 				if (pass) {
-					map.put("contentsno", contentsNo);
-					map.put("fupname", fupname);
-					ContentsProc.imageDelete(map);
+					image_map.put("contentsno", contentsNo);
+					image_map.put("fupname", fupname);
+					int count = ContentsProc.imageDelete(image_map);
+					if (count > 0)
+						System.out.println("이미지 디비 삭제");
 				}
 			}
 		});
-		
-		int categrpNo = ContentsProc.read(contentsNo).getCategrpNo();
-		int count = ContentsProc.delete(contentsNo);
-		
-		if(count > 0) {
+
+		int categrpNo = ContentsProc.read(contentsNo).getCategrpNo();// 카테고리 cnt -1
+		int count = ContentsProc.delete(contentsNo); // DB 삭제
+
+		if (count > 0) {
+			System.out.println("컨텐츠 디비 삭제");
+			count = cateGroupProc.cateGroupCntDown(categrpNo);
+			if (count > 0) {
+				System.out.println("카테고리 cnt 감소");
+				json.put("result", 0);
+			}
 		}
+
 		// 파일 모두 삭제
 		// DB삭제 fileDB => contentsDB 순으로
 		// 카테고리 -1
-
-		JSONObject json = new JSONObject();
 		return json.toString();
 	}
 

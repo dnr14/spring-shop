@@ -67,5 +67,10 @@ public class memberVO {
 	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
 	}
+	@Override
+	public String toString() {
+		return "memberVO [id=" + id + ", email=" + email + ", pwd=" + pwd + ", address1=" + address1 + ", address2="
+				+ address2 + ", zipcode=" + zipcode + ", phone=" + phone + ", rdata=" + rdata + ", key=" + key + "]";
+	}
 	
 }

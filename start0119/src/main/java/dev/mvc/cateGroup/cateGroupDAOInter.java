@@ -74,5 +74,5 @@ public interface cateGroupDAOInter {
 	 */
 	public String select(String categrpNo);
 	
-	public int cateGroupCntDown(int contentsno);
+	public int cateGroupCntDown(int categrpNo);
 }

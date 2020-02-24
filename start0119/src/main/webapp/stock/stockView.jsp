@@ -100,7 +100,7 @@ input[type=checkbox]{  -webkit-transform: scale(2.5); /* Safari and Chrome */  p
 					</div>
 					<div class="form-group">
 						<label for="stockCnt">재고수량</label>
-						<form:input path="stockCnt" type="number" min="0" max="99999" class="form-control" />
+						<form:input path="stockCnt" type="number" min="0" max="99999" class="form-control"  />
 						<div class="mt-2">
 							<form:errors path="stockCnt" style="color:red"/>
 						</div>
@@ -108,7 +108,7 @@ input[type=checkbox]{  -webkit-transform: scale(2.5); /* Safari and Chrome */  p
 					<div class="form-group">
 						<label for="manager">등록자</label>
 						<c:set value="${sessionScope.admin_id}" var="manager"/>
-						<form:input path="manager" type="text"  value="${manager }" class="form-control" />
+						<form:input path="manager" type="text"  value="${manager }" class="form-control"  readonly="true"/>
 						<div class="mt-2">
 							<form:errors path="manager" style="color:red"/>
 						</div>
@@ -158,7 +158,20 @@ input[type=checkbox]{  -webkit-transform: scale(2.5); /* Safari and Chrome */  p
 			<div class="text-right">
 				<button class="btn btn-primary" id="sotckDelete">삭제</button>
 			</div>
-			
+			<div class="mt-3 text-center">
+				<c:if test="${pm.prev}">
+					<a style="text-decoration: none; " href="./create?pagenum=${pm.startPage - 1}" >&laquo;</a>
+				</c:if>
+				<c:forEach begin="${pm.startPage}" end="${pm.endPage}" var="idx">
+
+					<c:if test="${idx != 0}">
+						<a style="text-decoration: none; " href="./create?pagenum=${idx}" >${idx }</a>
+					</c:if>
+				</c:forEach>
+				<c:if test="${pm.next}">
+					<a style="text-decoration: none; " href="./create?pagenum=${pm.endPage + 1}" >&raquo;</a>
+				</c:if>
+			</div>
 		</div>
 <jsp:include page="/menu/bottom.jsp" flush='false' />
 </body>
@@ -188,8 +201,11 @@ $(document).ready(function() {
 			}
 			
 			var param = {
-					array : multiparam
+					array : multiparam,
+					pagenum : ${pm.pagenum}
 			}
+			
+			console.log(param);
 			
 			 var obj =  {
 				      url : '${root}/stock/delete',
@@ -202,7 +218,12 @@ $(document).ready(function() {
 				      success : function(rdata) {
 				    	  
 				    	  console.log(rdata.result);
-				    	  location.reload();
+				    	  if(rdata.pagenum != ${pm.pagenum}){
+				    		  location.href='./stock/create=?pagenum=' + rdata.pagenum;				    		  
+				    	  }else{
+					    	  location.reload();
+				    	  }
+				    	  
 				      },
 				      error : function(request, status, error) { // callback 함수
 				    	  var msg = 'ERROR<br><br>';

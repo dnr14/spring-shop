@@ -66,6 +66,7 @@ public class CotentsProc implements ContentsProcInter{
 	}
     @Override
 	public int imageDelete(HashMap<String,Object> map) {
+    	System.out.println(map);
     	return ContentsFileDAO.imageDelete(map);
     }
     @Override
@@ -76,4 +77,10 @@ public class CotentsProc implements ContentsProcInter{
     public int delete(int contentsNo) {
     	return ContentsDAO.delete(contentsNo);
     }
+    @Override
+    public List<ContentsVO> index_list() {
+    	return ContentsFileDAO.index_list();
+    }
+    
+    
 }

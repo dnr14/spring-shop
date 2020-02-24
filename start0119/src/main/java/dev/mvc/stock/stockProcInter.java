@@ -1,5 +1,6 @@
 package dev.mvc.stock;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface stockProcInter {
@@ -16,7 +17,8 @@ public interface stockProcInter {
 	 * 재고 가져오기
 	 * @return
 	 */
-	public List<stockVO> selectStock();
+	public List<stockVO> selectStock(HashMap<String, Object> map);
+
 	
 	/**
 	 * 재고 삭제
@@ -38,5 +40,7 @@ public interface stockProcInter {
 	 * @return
 	 */
 	public int updateProc(stockVO stockVO);
+	public int selectStockCount();
+
 	
 }

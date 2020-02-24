@@ -22,4 +22,5 @@ public interface ContentsFileDAOInter {
 	public List<ContentsVO> contentsImageLoad(int contentsNo);
 	public List<ContentsVO> imagesAllLoad(int contentsNo);
 	public int imageDelete(HashMap<String,Object> map);
+	public List<ContentsVO> index_list();
 }

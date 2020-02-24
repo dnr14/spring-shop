@@ -87,7 +87,12 @@ public class  memberCreateRequest{
 		this.key = key;
 	}
 
-
+	@Override
+	public String toString() {
+		return "memberCreateRequest [id=" + id + ", email=" + email + ", pwd=" + pwd + ", pwd_check=" + pwd_check
+				+ ", phone=" + phone + ", zipcode=" + zipcode + ", address1=" + address1 + ", address2=" + address2
+				+ ", key=" + key + "]";
+	}
 
 	
 	
