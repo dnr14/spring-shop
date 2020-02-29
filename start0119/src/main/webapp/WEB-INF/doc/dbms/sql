@@ -62,18 +62,41 @@ CREATE TABLE CONTENTS_FILE
     foreign key(contents_no) REFERENCES contents(contentsno)
 );
 
+drop table orderr;
+
+create table orderr(
+    orderno number(20) not null primary key, -- 주문 번호
+    ordername varchar(100) not null, -- 주문자 이름
+    orderzipcode varchar(100) not null, -- 주문자 우편주소
+    orderaddress1 varchar(100) not null, -- 주문자 주소1
+    orderaddress2 varchar(100) not null, -- 주문자 주소2
+    orderphone VARCHAR(100) not null, -- 주문자 번호
+    stockname varchar(100) not null, -- 제품 이름
+    stockprice varchar(100) not null, -- 제품 가격
+    stockcnt varchar(100) not null, -- 제품 갯수
+    staticNumber number(25) not null, -- 송장번호
+    paymentstatus varchar(100) not null, -- 결제 상태
+    paymentmemberid varchar(100) not null, -- 결제 아이디
+    paymentkind varchar(100) not null, -- 결제종류
+    paymentbank varchar(100) not null, -- 결제은행
+    paymentprice varchar(100) not null, -- 결제 가격
+    deliverystatus varchar(100) not null, -- 배송상태
+    rdate date DEFAULT sysdate not null, -- 주문시간
+    foreign key(paymentmemberid) REFERENCES mem(id)
+);
+
 -- 할일 
 
 회원가입 이메일 인증 => Y까지 변경 성공 => 물건 구매 시 미인증 필요 로직 만들기
 
 회원정보 수정 => 비밀번호 제한 
 
-결제  ==> 
 
 유저 
+주문 관리 취소,
 댓글 대댓글 자기가 쓴 댓글 몰아 보기
 별점
 
-바로구매
+
 
 

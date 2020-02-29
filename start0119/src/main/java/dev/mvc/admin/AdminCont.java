@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,6 +29,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.mvc.member.memberCreateRequest;
 import dev.mvc.member.memberProcInter;
 import dev.mvc.member.memberVO;
+import dev.mvc.payment.PaymentProcInter;
+import dev.mvc.payment.PaymentVO;
+import dev.mvc.tool.DeliveryPageMaker;
+import dev.mvc.tool.PageMaker;
+import dev.mvc.tool.StockPageMaker;
 import dev.mvc.tool.UserPageMaker;
 
 @Controller
@@ -40,6 +47,9 @@ public class AdminCont {
 	@Autowired
 	@Qualifier("memberProc")
 	private memberProcInter memberProc;
+
+	@Autowired
+	private PaymentProcInter paymentProc;
 
 	public AdminCont() {
 		System.out.println("AdminCont ==>  AdminCont 狼粮己 积己");
@@ -222,6 +232,68 @@ public class AdminCont {
 				System.out.println(c + " 酒捞叼 昏力 ");
 			}
 		});
+		return json.toString();
+	}
+
+	/**
+	 * 硅价包府
+	 * 
+	 * @return
+	 */
+	@GetMapping("/delivery")
+	public ModelAndView deliveryForm(@RequestParam(value = "pagenum", defaultValue = "1") int pagenum,
+			@RequestParam(value = "seach", defaultValue = "") String seach) {
+		ModelAndView mav = new ModelAndView("admin/delivery");
+		DeliveryPageMaker dpm = new DeliveryPageMaker();
+
+		Map<String, Object> map = new HashMap<String , Object>();
+		map.put("seach", seach);
+		int totalcount = paymentProc.count(map);
+		
+		if (totalcount > 0) {
+			dpm.setTotalcount(totalcount);
+			dpm.setPagenum(pagenum);
+			dpm.setStartPageNum();
+			dpm.setEndPageNum();
+
+			dpm.setCurrentBlock();
+			dpm.setLastBlock();
+
+			dpm.setStartPage();
+			dpm.setEndPage(dpm.getLastBlock(), dpm.getCurrentBlock());
+
+			dpm.prevnext();
+
+			mav.addObject("delivery", paymentProc.delivery(dpm));
+			mav.addObject("pm", dpm);
+		}
+		return mav;
+	}
+
+	@PostMapping("/updateAjax")
+	public @ResponseBody String updateAjax(@RequestBody String array) {
+		System.out.println(array);
+		JSONArray json_array = new JSONArray(array);
+		json_array.forEach(json -> {
+			Map<String, Object> map = new JSONObject(json.toString()).toMap();
+			paymentProc.update(map);
+		});
+		return new JSONObject().toString();
+	}
+	
+
+	@RequestMapping(value = "/detaliAjax", produces = "text/plain;charset=UTF-8", method= {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody String detaliAjax(int orderNo) {
+		JSONObject json = null;
+		
+		try {
+			json = new JSONObject();
+			PaymentVO vo = paymentProc.detail(orderNo);
+			String value = new ObjectMapper().writeValueAsString(vo);
+			json.put("vo", value);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return json.toString();
 	}
 

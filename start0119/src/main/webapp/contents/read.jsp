@@ -62,7 +62,7 @@ $(document).ready(function(){
 				    	  alert("이미 장바구니에 등록되어있습니다.");
 			    	  }
 			    	  alert("바로 구매로 이동합니다.");
-			    	  document.location.href ="<c:url value='/purchase/purchase.do' />";
+			    	  document.location.href ="<c:url value='/payment/create' />";
 			      },
 			      error : function(request, status, error) {
 			      }
@@ -98,7 +98,7 @@ $(document).ready(function(){
 			    	  var result = rdata.result;
 			    	  if(result === "ok"){
 				    	  alert("장바구니에 등록되었습니다.");
-			    	  }else if(reuslt ==="over"){
+			    	  }else if(result === "over"){
 				    	  alert("장바구니에 5개만 등록가능합니다.");
 			    	  }
 			    	  else{

@@ -13,9 +13,9 @@
 <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=3.0, width=device-width" /> 
 <title>장바구니</title>
  
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
  
@@ -76,6 +76,9 @@ input[type=checkbox]{  -webkit-transform: scale(2.5); /* Safari and Chrome */  p
 					</c:choose>
 				</table>
 				<div class="text-right">
+				<c:if test="${list.size() != 0 }">
+					<button type="button" id="order">결제</button>
+				</c:if>
 					<button type="button" id="BasketDelete">삭제</button>
 				</div>
 			</div>
@@ -120,6 +123,11 @@ $(document).ready(function(){
 		});
 		
 	});
+	
+	$("#order").on('click',function(){
+		location.href='../payment/create';
+	});
+	
 });
 </script>
 

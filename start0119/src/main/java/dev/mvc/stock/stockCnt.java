@@ -49,35 +49,39 @@ public class stockCnt {
 	@GetMapping("/create")
 	public ModelAndView stockForm(@RequestParam(value = "pagenum", defaultValue = "1") int pagenum) {
 
+		ModelAndView mav = new ModelAndView("/stock/stockView");
 		StockPageMaker pm = new StockPageMaker();
 
 		int stockCount = stockProc.selectStockCount();
-		pm.setTotalcount(stockCount);
-		pm.setPagenum(pagenum);
-		pm.setStartPageNum();
-		pm.setEndPageNum();
+		if (stockCount > 0) {
 
-		pm.setCurrentBlock();
-		pm.setLastBlock();
+			pm.setTotalcount(stockCount);
+			pm.setPagenum(pagenum);
+			pm.setStartPageNum();
+			pm.setEndPageNum();
 
-		pm.setStartPage();
-		pm.setEndPage(pm.getLastBlock(), pm.getCurrentBlock());
+			pm.setCurrentBlock();
+			pm.setLastBlock();
 
-		pm.prevnext();
+			pm.setStartPage();
+			pm.setEndPage(pm.getLastBlock(), pm.getCurrentBlock());
 
-		System.out.println(pm.toString());
+			pm.prevnext();
 
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("startPageNum", pm.getStartPageNum());
-		map.put("endPageNum", pm.getEndPageNum());
-		
-		stockProc.selectStock(map).stream().forEach(action -> {
-			System.out.println(action.toString());
-		});
+			System.out.println(pm.toString());
 
-		return new ModelAndView("/stock/stockView").addObject("stockCateGroup", cateGroupProc.stockCateGroup())
-				.addObject("stockCreateRequest", new stockCreateRequest()).addObject("list", stockProc.selectStock(map))
-				.addObject("pm", pm);
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("startPageNum", pm.getStartPageNum());
+			map.put("endPageNum", pm.getEndPageNum());
+			mav.addObject("list", stockProc.selectStock(map));
+			mav.addObject("pm", pm);
+		}
+
+		mav.addObject("stockCateGroup", cateGroupProc.stockCateGroup());
+		mav	.addObject("stockCreateRequest", new stockCreateRequest());
+
+		return mav;
+				
 	}
 
 	/**
@@ -134,18 +138,18 @@ public class stockCnt {
 			json.put("result", "재고 일부를 삭제하지 못했습니다.");
 		} else {
 			StockPageMaker pm = new StockPageMaker();
-			int pagenum = (int)map.get("pagenum");
+			int pagenum = (int) map.get("pagenum");
 			pm.setPagenum(pagenum);
 			pm.setStartPageNum();
 			pm.setEndPageNum();
-			
+
 			map.put("startPageNum", pm.getStartPageNum());
 			map.put("endPageNum", pm.getEndPageNum());
-			
-			if(stockProc.selectStock(map).stream().count() == 0) {
+
+			if (stockProc.selectStock(map).stream().count() == 0) {
 				pagenum--;
 			}
-			
+
 			json.put("result", "재고를 삭제 했습니다.");
 			json.put("pagenum", pagenum);
 		}

@@ -71,6 +71,7 @@ $(document).ready(function(){
 		            	</c:when>
 	            		<c:otherwise>
 	            		     <li class="nav-item"><a href="${root }/basket/list" class="nav-link">장바구니</a></li>
+	            		     <li class="nav-item"><a href="${root }/payment/create" class="nav-link">결제</a></li>
 	            		     <li class="nav-item"><a href="${root }/member/update" class="nav-link">회원수정</a></li>
 	                    	 <li class="nav-item"><a href="${root }/member/logOut" class="nav-link" onclick="alert('로그아웃 되었습니다.');">로그아웃</a></li>
 	            		</c:otherwise>
@@ -87,6 +88,7 @@ $(document).ready(function(){
                 		 <li class="nav-item"><a href="${root }/cateGroup/create" class="nav-link">카테고리 관리</a></li>
                			 <li class="nav-item"><a href="${root }/stock/create" class="nav-link">재고 관리</a></li>
                			 <li class="nav-item"><a href="${root }/contents/create" class="nav-link">상품 등록</a></li>
+               			 <li class="nav-item"><a href="${root }/admin/delivery" class="nav-link">배송 관리</a></li>
                 		 <li class="nav-item"><a href="${root }/admin/logOut" class="nav-link">관리자 로그아웃</a></li>
                 	</c:otherwise>
                 </c:choose>

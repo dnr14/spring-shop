@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.mvc.payment.PaymentDAOInter">
+
+	<select id="list" parameterType="String" resultType="PaymentVO">
+		SELECT
+		b.basketno, b.uri, b.title, b.cnt, cf.thumb, s.stockprice
+		FROM basket B
+		INNER JOIN STOCK S
+		ON b.stockno = s.stockno INNER JOIN CONTENTS_FILE CF
+		ON B.CONTENTSNO = CF.CONTENTS_NO
+		WHERE cf.thumb IS NOT NULL AND
+		b.memberid =#{memberId}
+	</select>
+
+	<insert id="create" parameterType="PaymentCreateDTO">
+		INSERT INTO orderr
+		(
+		ORDERNO,
+		ORDERNAME,
+		orderzipcode,
+		orderaddress1,
+		orderaddress2,
+		orderphone ,
+		stockname ,
+		stockprice ,
+		stockcnt ,
+		staticNumber,
+		paymentstatus ,
+		paymentmemberid ,
+		paymentkind ,
+		paymentbank,
+		paymentprice ,
+		deliverystatus
+		)
+		values
+		(
+		(SELECT NVL(MAX(ORDERNO) ,0 ) +1 AS ORDERNO FROM ORDERR),
+		#{ orderName },
+		#{ orderZipcode },
+		#{ orderAddress1 },
+		#{ orderAddress2 },
+		#{ orderPhone },
+		#{ stockName },
+		#{ stockPrice },
+		#{ stockCnt },
+		#{ staticNumber },
+		#{ status },
+		#{ memberid },
+		#{ kind },
+		#{ bank },
+		#{ totalPrice },
+		#{ deliveryStatus }
+		)
+	</insert>
+
+	<select id="select" parameterType="String"
+		resultType="PaymentVO">
+		SELECT s.stockname,s.stockprice,b.cnt,b.basketno
+		FROM basket
+		B INNER JOIN STOCK S
+		ON b.stockno = s.stockno
+		WHERE b.memberid = #{memberId}
+	</select>
+
+	<select id="delivery" resultType="PaymentVO"	parameterType="DeliveryPageMaker">
+		SELECT B.*
+		FROM(
+			select
+			ROW_NUMBER() OVER(ORDER BY RDATE DESC) AS ROW_NUM,
+			staticnumber,
+			paymentkind,
+			paymentbank,
+			paymentstatus,
+			deliverystatus,
+			rdate,
+			orderno,
+			paymentprice
+			from orderr
+		) B WHERE ROW_NUM BETWEEN #{startPageNum} AND #{endPageNum}
+	</select>
+
+	<update id="update" parameterType="HashMap">
+		update orderr set
+		deliverystatus = #{ deliveryStatus }
+		where orderno = #{ orderNo }
+	</update>
+
+	<select id="detail" parameterType="int" resultType="PaymentVO">
+		select
+		orderno,
+		ordername,
+		orderzipcode,
+		orderaddress1,
+		orderaddress2,
+		orderphone,
+		stockname,
+		stockprice,
+		stockcnt
+		from orderr
+		where orderno = #{ orderNo }
+	</select>
+	
+	<select id="count" resultType="int" parameterType="HashMap">
+		select count(*) as count
+		from orderr
+	    <if test="seach != null">
+		where staticnumber LIKE '%'||#{seach}||'%' 
+		</if>
+	</select>
+
+</mapper>

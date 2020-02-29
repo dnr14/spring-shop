@@ -38,6 +38,7 @@
 	<context:component-scan base-package="dev.mvc.tool" />
 	<context:component-scan base-package="dev.mvc.contents" />
 	<context:component-scan base-package="dev.mvc.basket" />
+	<context:component-scan base-package="dev.mvc.payment" />
 
 	<!-- FORM의 FILE 태그를 읽어 MultipartFile 객체로 변환 -->
 	<beans:bean id="multipartResolver"

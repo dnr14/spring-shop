@@ -27,7 +27,8 @@
     dev.mvc.stock,
     dev.mvc.contents,
     dev.mvc.tool,
-    dev.mvc.basket"/>
+    dev.mvc.basket,
+    dev.mvc.payment"/>
     <!-- /src/main/resources/mybatis 폴더 -->
     <property name="mapperLocations" value="classpath:mybatis/*.xml" />
   </bean>

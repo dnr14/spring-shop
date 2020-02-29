@@ -39,6 +39,7 @@ public class HomeController {
 	@RequestMapping(value="/" , method=RequestMethod.GET)
 	public String home(Model model) {
 		model.addAttribute("list", contentsProc.index_list());
+		System.out.println(contentsProc.index_list().toString());
 		return "home";
 	}
 	
