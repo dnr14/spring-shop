@@ -95,9 +95,9 @@ public class memberCnt {
 		try {
 			memberProc.register(memberCreateRequest); // 유효성 검사
 		} catch (AlreadyExistingEmailException e) {
-			errors.rejectValue("email", "duplicate", "이미 가입된 이메일입니다.");
+			errors.rejectValue("email", "duplicate", e.getMessage());
 		} catch (AlreadyExistingIdException e) {
-			errors.rejectValue("id", "duplicate", "이미 가입된 아이디입니다.");
+			errors.rejectValue("id", "duplicate",  e.getMessage());
 		} finally {
 			if (errors.hasErrors()) {
 				return new ModelAndView("member/create");

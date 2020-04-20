@@ -2,6 +2,7 @@ package dev.mvc.stock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.javassist.expr.Instanceof;
 import org.json.JSONObject;
@@ -127,7 +128,7 @@ public class stockCnt {
 		JSONObject json = new JSONObject();
 
 		ArrayList<String> list = (ArrayList<String>) map.get("array");
-
+		
 		int count = 0;
 
 		for (String stockNo : list) {
@@ -163,21 +164,27 @@ public class stockCnt {
 	 * @param stockNo
 	 * @return
 	 */
-	@PostMapping(value = "/update", produces = "text/plain;charset=UTF-8")
+	@PostMapping(value = "/update")
 	@ResponseBody
-	public String stockUpdateAjax(int stockNo) {
+	public Map<String, Object> stockUpdateAjax(int stockNo) {
 		JSONObject json = new JSONObject();
-
+		Map<String, Object> map = new HashMap<>();
 		try {
 			String string = "";
 			string = new ObjectMapper().writeValueAsString(stockProc.update(stockNo));
-			json.put("stockVO", string);
+			json.put("stockVO", stockProc.update(stockNo));
 			json.put("cateGroup", cateGroupProc.stockCateGroup());
-
+			map.put("stockVO", stockProc.update(stockNo));
+			map.put("cateGroup", cateGroupProc.stockCateGroup());
+			// 그냥 맵으로 보내면 vo객체 직렬화를 안해도 보내진다.
+			// 리턴으로 순수 vo만 보내고 json처럼 key value형태로 보내진다.
+			// 굳이 JSONObejct만들어서 넣고 보낼필요없다.
+			// 여러개의 데이터를 보낼때는 map에넣는다.
+			
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		return json.toString();
+		return map;
 	}
 
 	/**

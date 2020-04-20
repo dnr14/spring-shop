@@ -250,7 +250,7 @@ $(document).ready(function() {
 				      dataType : "json",
 				      data : "stockNo="+ stockNo,
 				      success : function(rdata) {
-				    	  var jsonData = JSON.parse(rdata.stockVO);
+				    	  var jsonData = rdata.stockVO;
 				    	  $("#update_stockName").val(jsonData.stockName);
 				    	  $("#update_stockPrice").val(jsonData.stockPrice);
 				    	  $("#update_stockCnt").val(jsonData.stockCnt);

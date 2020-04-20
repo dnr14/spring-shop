@@ -88,7 +88,7 @@ $(document).ready(function(){
 		
 		/* 장바구니 ajax 시작 */
 		 var obj =  {
-			      url : '../basket/add',
+			      url : '${root}/basket/add',
 			      type : 'get',
 			      cache: false,
 			      async : true,
@@ -123,13 +123,12 @@ $(document).ready(function(){
   }, 2000);
   
   var obj =  {
-      url : '/photo/contents/read_file',
+      url : '${root}/contents/read_file',
       type : 'get',
       cache: false,
       async : true,
       dataType : 'json',
       data : 'contentsNo=' + ${contentsVO.contentsNo},
-      
       success : function(rdata) {
         if(rdata.file_read.length > 0){
         $("#images").attr("src","./storage/" + rdata.file_read[0].fupname);
